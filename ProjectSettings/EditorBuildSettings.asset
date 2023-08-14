@@ -5,27 +5,9 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
+  - enabled: 1
+    path: Assets/Chakana pack/Scenes/00 - Intro.unity
+    guid: ee27af20df5de144a802dbef6e4d0225
   - enabled: 1
     path: Assets/Chakana pack/Scenes/00- Main Menu 0.unity
     guid: 53529b99d57f0b04c9d6d8fd7ca00cba
@@ -53,9 +35,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Chakana pack/Scenes/08-Room 8.unity
     guid: 22cbfd8a2bdaf114c8140c4cf65f281b
-  - enabled: 0
-    path: 
-    guid: 00000000000000000000000000000000
   - enabled: 1
     path: Assets/Chakana pack/Scenes/09-Room 9.unity
     guid: 76deed11eb53f31469e3ec0d895ad10c
@@ -74,5 +53,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Chakana pack/Scenes/14-Boss Room.unity
     guid: 0f799d333187c4b4fbd5d1a65212a2fa
+  - enabled: 1
+    path: Assets/Chakana pack/Scenes/00- Credits 0.unity
+    guid: 263d55ce81e6a0f479e244b3f96eb2ff
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: f521a35c33e5c6243a9ae5482e3c96a5, type: 2}

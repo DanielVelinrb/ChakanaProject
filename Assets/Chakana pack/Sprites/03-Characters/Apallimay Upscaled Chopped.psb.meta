@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -47,6 +49,7 @@ ScriptedImporter:
     flipbookRows: 0
     flipbookColumns: 0
     ignorePngGamma: 0
+    cookieMode: 0
     filterMode: 1
     aniso: 1
     mipBias: 0
@@ -87,8 +90,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
   rigSpriteImportData:
   - name: Head
@@ -864,8 +867,8 @@ ScriptedImporter:
     - {x: 56, y: 57}
     - {x: 57, y: 58}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -1814, y: -802}
+    uvTransform: {x: 4, y: 2000}
+    spritePosition: {x: 1818, y: 2802}
   - name: Neck
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1286,8 +1289,8 @@ ScriptedImporter:
     - {x: 29, y: 30}
     - {x: 30, y: 31}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -1783, y: 794}
+    uvTransform: {x: 4, y: 3093}
+    spritePosition: {x: 1787, y: 2299}
   - name: Body
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1760,8 +1763,8 @@ ScriptedImporter:
     - {x: 31, y: 32}
     - {x: 32, y: 33}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -1498, y: -1504}
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 1502, y: 1508}
   - name: Left arm
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2460,8 +2463,8 @@ ScriptedImporter:
     - {x: 48, y: 49}
     - {x: 49, y: 50}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 1027, y: -1015}
+    uvTransform: {x: 2008, y: 1271}
+    spritePosition: {x: 981, y: 2286}
   - name: Right arm
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -3213,8 +3216,8 @@ ScriptedImporter:
     - {x: 51, y: 52}
     - {x: 52, y: 53}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -1304, y: -2150}
+    uvTransform: {x: 2008, y: 4}
+    spritePosition: {x: 3312, y: 2154}
   - name: Rigth leg
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -3871,8 +3874,8 @@ ScriptedImporter:
     - {x: 47, y: 48}
     - {x: 48, y: 49}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -1181, y: -513}
+    uvTransform: {x: 2008, y: 540}
+    spritePosition: {x: 3189, y: 1053}
   - name: Left leg
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -4590,8 +4593,8 @@ ScriptedImporter:
     - {x: 49, y: 50}
     - {x: 50, y: 51}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 44, y: 1781}
+    uvTransform: {x: 1531, y: 3093}
+    spritePosition: {x: 1487, y: 1312}
   characterData:
     bones:
     - name: bone_1
@@ -4813,6 +4816,7 @@ ScriptedImporter:
       order: 0
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   sharedRigSpriteImportData: []
   sharedRigCharacterData:
@@ -4820,10 +4824,12 @@ ScriptedImporter:
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings:
   - name: DefaultTexturePlatform
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
@@ -4835,6 +4841,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: Standalone
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -4846,6 +4853,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: Server
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -4857,6 +4865,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: Android
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -4868,6 +4877,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: iPhone
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -4887,6 +4897,8 @@ ScriptedImporter:
   paperDollMode: 0
   keepDupilcateSpriteName: 1
   skeletonAssetReferenceID: 
+  padding: 4
+  spriteSizeExpand: 0
   spriteCategoryList:
     categories: []
   spritePackingTag: 
@@ -4965,6 +4977,9 @@ ScriptedImporter:
     isVisible: 1
   sharedRigPSDLayers: []
   pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
   prefabAssetName: 

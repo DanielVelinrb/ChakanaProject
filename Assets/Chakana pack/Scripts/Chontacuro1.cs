@@ -1,191 +1,281 @@
-using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 
-public class Chontacuro1 : MonoBehaviour
+
+public class Chontacuro1 : Enemy
 {
-    //variables
+    [SerializeField] public float movementSpeed;
+    [SerializeField] public float seguimientoSpeed;
 
-    private CinemachineVirtualCamera cm;
-    private SpriteRenderer sp;
-    private Rigidbody2D rb;
+    [SerializeField] private float direction = 1;
+    [SerializeField] private bool siguiendo = false;
 
-    private Hoyustus hoyustusPlayerCotroller;
-    private bool applyForce;
-
-    public float movementSpeed = 3;
-    public float detectionRadius = 3;
-    public LayerMask playerLayer;
-
-    public Vector2 Chontacuro1HeadPossition; 
-    public bool inChontacuro1Head;
-    public int Chontacuro1Lives;
-
-    public string Chontacuro1Name;
-
-    private float speed;
-    
-    private Vector3 limit1, limit2, objetivo;
-
-    int pasos = 0;
-
+    [SerializeField] private Vector3 limit1, limit2;
+    [SerializeField] private float posY;
     [SerializeField] Animator anim;
+
+    [SerializeField] Transform groundDetector;
+    [SerializeField] Transform wallDetector;
+    [SerializeField] AudioClip audioHurt;
+
+    AudioSource charAudio;
+
 
     private void Awake()
     {
-        cm = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
-        sp = GetComponent<SpriteRenderer>();
         rb = GetComponent<Rigidbody2D>();
-        hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
         anim = GetComponent<Animator>();
-        anim.SetFloat("XVelocity", rb.velocity.x);
-
-        Debug.Log("XVelocity: "+ rb.velocity.x);
+        charAudio = GetComponent<AudioSource>();
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        gameObject.name = Chontacuro1Name;
+        fuerzaRecoil = 1;
+        explosionInvulnerable = "ExplosionEnemy";
+        speed = movementSpeed;
 
-        speed = 4f;
-        limit1 = new Vector3(-60f, 0f, 0f);
-        limit2 = new Vector3(60f, 0f, 0f);
+        limit1 = transform.GetChild(0).gameObject.transform.position;
+        limit2 = transform.GetChild(1).gameObject.transform.position;
         objetivo = limit1;
-        
+        layerObject = transform.gameObject.layer;
+        posY = transform.localPosition.y;
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        //Move();
-
-        detectionRadius = 10;
-        movementSpeed = 5f;
-
-        Vector2 direction = hoyustusPlayerCotroller.transform.position - transform.position;
-        float distance = Vector2.Distance(transform.position, hoyustusPlayerCotroller.transform.position);
-
-        //Debug.Log("distance: " + distance + " // detectionRadius: " + detectionRadius);
-
-        //Debug.Log("distance: " + distance + " // detectionRadius: " + detectionRadius);
-
-        if (distance <= detectionRadius)
-        {
-            rb.velocity = direction.normalized * movementSpeed;
-            Chontacuro1Flip(direction.normalized.x);
-            anim.SetBool("Chontacuro1Walk", true);
-        }
-        else {
-            rb.velocity = direction.normalized * -0f;
-
-        
-
-            //if (distance <= detectionRadius +1)
-              //  transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            Move();
-            //Chontacuro1FlipBack(direction.normalized.x);
-            //Chontacuro1Flip(direction.normalized.x);
-            anim.SetBool("Chontacuro1Walk", false);
-        }
-
+    private void Falling() {
+        rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 4.5f;
     }
+
+    private void Muerte() {
+        Instantiate(deathFX, transform.position, Quaternion.identity);
+        Destroy(this.gameObject);
+    }
+
+
     private void FixedUpdate()
     {
-        //Move();
-    }
-    private void Chontacuro1Flip(float xDirection)
-    {
-        //Debug.Log("Chontacuro1Flip xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x);
-
-        if (xDirection<0 && transform.localScale.x >0)
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-
-        }else if (xDirection > 0 && transform.localScale.x < 0)
-        {
-
-            transform.localScale = new Vector3( Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
+        detectarPiso();
+        if ((transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x) && Physics2D.OverlapCircle(transform.position + Vector3.down * 0.5f, 0.2f, groundLayer)) {
+            Flip();
         }
 
-    }
-    private void Chontacuro1FlipBack(float xDirection)
-    {
+        if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x,
+            wallDetector.position + Vector3.down * 0.5f, wallLayer) && playable)
+            detectarPared();
 
-        
-
-        // if (xDirection < 0 && transform.localScale.x > 0)
-        if (xDirection > 0 &&  transform.localScale.x < 0)
+        if (playable)
         {
-
-            Debug.Log("Entra if 1 .. Chontacuro1FlipBack xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x + " // hoyustusPlayerCotroller.transform.localScale.x: " + hoyustusPlayerCotroller.transform.localScale.x);
-
-            transform.localScale = new Vector3((-1*hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
-
-        }
-        //else if (xDirection > 0 && transform.localScale.x < 0)
-        else if (xDirection < 0 && transform.localScale.x > 0)
-        {
-
-            Debug.Log("Entra if 2 .. Chontacuro1FlipBack xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x + " // hoyustusPlayerCotroller.transform.localScale.x: "+ hoyustusPlayerCotroller.transform.localScale.x);
-
-            transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            
-
+            Move();            
         }
 
-    }
-    private void Move()
-    {
-
-       
-
-        Debug.Log("Pasos: "+pasos);
-
-        //transform.position = Vector2.MoveTowards(transform.position, objetivo, 5f * Time.deltaTime);
-        if (pasos >= 0 && pasos <= 100)
+        if (rb.velocity.y < 0)
         {
-            Debug.Log("If pasos <= 10 -->" + pasos);
-            
-            transform.position = new Vector3(gameObject.transform.position.x + 0.04f, gameObject.transform.position.y, gameObject.transform.position.z);
-            pasos = pasos + 1;
-            transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
+            Falling();
+        }
+
+        if (vida <= 0)
+        {
+            Muerte();
+        }
+    }
+
+
+    private void detectarPared() {
+        if (transform.localScale.x == -1)
+        {
+            limit1 = transform.position + Vector3.right;
+            objetivo = limit1;
+            direction = 1;
         }
         else
         {
-            
-
-            Debug.Log("Else If pasos > 10 -->" + pasos);
-            transform.position = new Vector3(gameObject.transform.position.x - 0.04f, gameObject.transform.position.y, gameObject.transform.position.z);
-            pasos = pasos + 1;
-            transform.localScale = new Vector3(-1f, transform.localScale.y, transform.localScale.z);
-
-            if (pasos == 200)
-            {
-                pasos = 0;
-                transform.localScale = new Vector3(1f, transform.localScale.y, transform.localScale.z);
-            }
-                
+            limit2 = transform.position - Vector3.right;
+            objetivo = limit2;
+            direction = -1;
         }
 
 
+        if (siguiendo)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+            speed = 0;
+        }
+        else
+        {
+            speed = movementSpeed;
+        }
+    }
 
 
-        //if (transform.position.x <= limit1.x)
-        //{
-        //    Debug.Log("entra al if transform.position.x es:"+ transform.position.x+ " limit1.x:"+ limit1.x+ "objetivo:" + objetivo);
+    private void OnTriggerStay2D(Collider2D collider)
+    {
 
-        //    objetivo = limit2;
+        if (collider.gameObject.CompareTag("Player"))
+        {
+            Debug.DrawLine(transform.position, collider.transform.position, Color.red);
+            if (!detectarPiso() && !Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
+                Vector3.Distance(transform.position, collider.transform.position), wallLayer))
+            {
+                speed = 0;
+            }
+            else if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
+                Vector3.Distance(transform.position, collider.transform.position), wallLayer))
+            {
+                speed = seguimientoSpeed;
+                siguiendo = true;
+                objetivo = collider.transform.position;
+            }
+            else if (Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
+                Vector3.Distance(transform.position, collider.transform.position), wallLayer)) {
+                siguiendo = false;
+                speed = movementSpeed;
+            }
+        }
+    }
 
-        //    Debug.Log("despues de objetivo = limit2; transform.position.x es:" + transform.position.x + " limit1.x:" + limit1.x + "objetivo:" + objetivo);
+    public bool detectarPiso() {
+        if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer)) {
+            if (direction == - 1) {
+                limit1 = transform.position + Vector3.right * 0.1f;
+            }
+            else if(direction == 1)
+            {
+                limit2 = transform.position - Vector3.right * 0.1f;
+            }
+            return false;
+        }
+        return true;
+    }
 
-        //}
-        //else if (transform.position.x >= limit2.x)
-        //{
-        //    Debug.Log("entra al else transform.position.x es:" + transform.position.x + " limit1.x:" + limit1.x);
+    private void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.gameObject.CompareTag("Player")) {
+            siguiendo = false;
+            speed = movementSpeed;
+            if (transform.position.x >= collider.transform.position.x) {
+                if (transform.position.x < limit1.x)
+                {
+                    objetivo = limit1;
+                }
+                else {
+                    objetivo = limit2;
+                }
+            }
+            else if (transform.position.x < collider.transform.position.x) {
+                objetivo = limit2;
+                if (transform.position.x > limit2.x)
+                {
+                    objetivo = limit2;
+                }
+                else
+                {
+                    objetivo = limit1;
+                }
+            }
+        }
+    }
 
-        //    objetivo = limit1;
-        //}
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && transform.position.y - 3 < posY)
+        {
+            speed = movementSpeed;
+            posY = transform.position.y;
+            limit1 = transform.position + Vector3.left * 5.5f;
+            limit2 = transform.position + Vector3.right * 5.5f;
+            objetivo = limit2;
+
+            if (limit1.x >= limit2.x)
+            {
+                Vector3 aux = limit1;
+                limit1 = limit2;
+                limit2 = aux;
+            }
+        }
+    }
+
+
+    protected override void Recoil(int direccion, float fuerzaRecoil)
+    {
+        playable = false; //EL OBJECT ESTARIA SIENDO ATACADO Y NO PODRIA ATACAR-MOVERSE COMO DE COSTUMBRE
+        rb.AddForce(new Vector2(-direccion * 10, rb.gravityScale * 4), ForceMode2D.Impulse);
+    }
+
+
+    private void Move()
+    {
+        rb.velocity = new Vector2(direction * speed * (1 - afectacionViento), rb.velocity.y);
+
+        if (!siguiendo) { 
+            if (transform.position.x <= limit1.x) objetivo = limit2;
+            else if (transform.position.x >= limit2.x) objetivo = limit1;
+        }
+    }
+
+    private void Flip() {
+        if (transform.position.x < objetivo.x) direction = 1;
+        else if (transform.position.x > objetivo.x) direction = -1;
+
+        transform.localScale = new Vector3(direction, 1, 0);
+    }
+
+
+    private new void OnTriggerEnter2D(Collider2D collider)
+    {
+        base.OnTriggerEnter2D(collider);
+
+        if (collider.gameObject.layer == 14 && playable)
+        {
+            StartCoroutine(cooldownRecibirDanio((int)Mathf.Sign(collider.transform.position.x - transform.position.x), 1));
+            collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
+            recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+            charAudio.loop = false;
+            charAudio.Stop();
+            charAudio.clip = audioHurt;
+            charAudio.Play();
+        }
+
+        if (collider.gameObject.CompareTag("Viento") && !collider.gameObject.name.Contains("Enemy"))
+        {
+            if (estadoViento) StopCoroutine("afectacionEstadoViento");
+            else if (counterEstados > 0)
+            {
+                counterEstados += 1;
+                this.combinacionesElementales();
+                return;
+            }
+            estadoViento = true;
+            counterEstados = 1;
+            StartCoroutine("afectacionEstadoViento");
+        }
+        else if (collider.gameObject.CompareTag("Fuego") && !collider.gameObject.name.Contains("Enemy"))
+        {
+            if (estadoFuego) StopCoroutine("afectacionEstadoFuego");
+            else if (counterEstados > 0)
+            {
+                counterEstados += 10;
+                combinacionesElementales();
+                return;
+            }
+            estadoFuego = true;
+            counterEstados = 10;
+            StartCoroutine("afectacionEstadoFuego");
+        }
+    }
+
+
+    private new void combinacionesElementales()
+    {
+        if (counterEstados == 11)
+        {
+             if (combObj01 == null) combObj01 = Instantiate(combFX01, transform.position, Quaternion.identity, transform);
+
+            estadoViento = false;
+            afectacionViento = 0;
+            counterEstados = 10;
+            aumentoFuegoPotenciado = 3;
+            ataque = ataqueMax * 0.75f;
+            StopCoroutine("afectacionEstadoFuego");
+            estadoFuego = true;
+            StartCoroutine("afectacionEstadoFuego");
+        }
     }
 }

@@ -1,111 +1,173 @@
 using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 
-public class Tzantza : MonoBehaviour
+public class Tzantza : Enemy
 {
-    //variables
+    [SerializeField] private bool siguiendo = false;
+    [SerializeField] private GameObject bolaFuego;
+    [SerializeField] private bool ataqueDisponible;
+    [SerializeField] private bool atacando;
+    [SerializeField] private float t1;
+    [SerializeField] private float t2;
+    [SerializeField] private float cooldownAtaque;
+    [SerializeField] AudioClip audioHurt;
+    [SerializeField] private float distanciaMinimaJugador;
 
-    private CinemachineVirtualCamera cm;
-    private SpriteRenderer sp;
-    private Rigidbody2D rb;
+    AudioSource charAudio;
 
-    private Hoyustus hoyustusPlayerCotroller;
-    private bool applyForce;
-
-    public float movementSpeed = 3;
-    public float detectionRadius = 3;
-    public LayerMask playerLayer;
-
-    public Vector2 tzantzaHeadPossition;
-    public bool inTzantzaHead;
-    public int tzantzaLives;
-
-    public string tzantzaName;
-
-    private void Awake()
+    private void Muerte()
     {
-        cm = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
-        sp = GetComponent<SpriteRenderer>();
-        rb = GetComponent<Rigidbody2D>();
-        hoyustusPlayerCotroller = GameObject.FindGameObjectWithTag("Player").GetComponent<Hoyustus>();
+        if (vida <= 0) {
+            Instantiate(deathFX, transform.position, Quaternion.identity);
+
+            Destroy(this.gameObject);
+        }      
     }
 
-    // Start is called before the first frame update
     void Start()
     {
-        gameObject.name = tzantzaName; 
+        charAudio = GetComponent<AudioSource>();
+        rb = GetComponent<Rigidbody2D>();
+        explosionInvulnerable = "ExplosionEnemy";
+        explosion = Resources.Load<GameObject>("Explosion");
+        layerObject = transform.gameObject.layer;
+        fuerzaRecoil = 2f;
+        ataqueDisponible = true;
+        vidaMax = vida;
     }
 
-    // Update is called once per frame
+
     void Update()
     {
+        Muerte();
 
-        detectionRadius = 15;
-        movementSpeed = 7;
+        if (siguiendo && playable) {
+            Move();
+        }
+        
+    }
 
-        Vector2 direction = hoyustusPlayerCotroller.transform.position - transform.position;
-        float distance = Vector2.Distance(transform.position, hoyustusPlayerCotroller.transform.position);
 
-        //Debug.Log("distance: " + distance + " // detectionRadius: " + detectionRadius);
+    protected override void Recoil(int direccion, float fuerzaRecoil)
+    {
+        playable = false;
+        rb.AddForce(new Vector2(direccion * 8, 0.5f), ForceMode2D.Impulse);
+    }
 
-        //Debug.Log("distance: " + distance + " // detectionRadius: " + detectionRadius);
 
-        if (distance <= detectionRadius)
+    private IEnumerator Ataque(Vector3 objetivoAtaque) {
+        playable = false;
+        rb.velocity = Vector2.zero;
+        ataqueDisponible = false;
+        yield return new WaitForSeconds(t1);
+        GameObject bolaFuegoGenerada = Instantiate(bolaFuego, transform.position, Quaternion.identity);
+        bolaFuegoGenerada.name += "Enemy";
+        bolaFuegoGenerada.GetComponent<ProyectilMovUniforme>().setDanio(ataque);
+        atacando = true;
+        //TIEMPO ANIMACION
+        yield return new WaitForSeconds(0.5f);
+        atacando = false;
+        yield return new WaitForSeconds(t2);
+        playable = true;
+        yield return new WaitForSeconds(cooldownAtaque);
+        ataqueDisponible = true;
+    }
+
+
+    private new void OnTriggerEnter2D(Collider2D collider)
+    {
+        base.OnTriggerEnter2D(collider);
+
+        if (collider.gameObject.layer == 14 && playable)
         {
-            rb.velocity = direction.normalized * movementSpeed;
-            TzantzaFlip(direction.normalized.x);
+            int direccion = 1;
+            if (collider.transform.position.x > gameObject.transform.position.x)
+            {
+                direccion = -1;
+            }
+            else
+            {
+                direccion = 1;
+            }
+            triggerElementos_1_1_1(collider);
+            StartCoroutine(cooldownRecibirDanio(direccion, 1));
+            if (collider.transform.parent != null)
+            {
+                collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
+                recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                charAudio.loop = false;
+                charAudio.Stop();
+                charAudio.clip = audioHurt;
+                charAudio.Play();
+            }
+            return;
+        }
+        else if (collider.gameObject.layer == 11 && !collider.name.Contains("Hoyustus Solicitud Prefab"))
+        {
+            return;
+        }
+
+
+        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18){
+            triggerElementos_1_1_1(collider);
+        }
+    }
+
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player")) {
+            siguiendo = true;
+            objetivo = collision.transform.position;
+
+            try
+            {
+                if (Vector3.Distance(transform.position, collision.transform.position) <= rangoAtaque && ataqueDisponible)
+                {
+                    StartCoroutine(Ataque(collision.transform.position));
+                }
+            } catch { }
+        }
+    }
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (!collision.gameObject.name.Contains("Enemy"))
+        {
+            collisionElementos_1_1_1(collision);
+        }
+    }
+
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player"))
+        {
+            siguiendo = false;
+            rb.velocity = Vector2.zero;
+        }
+    }
+
+
+    private void Move()
+    {
+        Vector2 direction = objetivo - transform.position;
+        float distance = Vector2.Distance(transform.position, objetivo);
+
+        if (objetivo.x < transform.position.x) {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (objetivo.x > transform.position.x) {
+            transform.localScale = Vector3.one;
+        }
+
+        if (Vector3.Distance(transform.position, objetivo) > distanciaMinimaJugador)
+        {
+            rb.velocity = direction.normalized * speed * (1 - afectacionViento);
         }
         else {
-            rb.velocity = direction.normalized * -0.5f;
-
-            if (distance <= detectionRadius +1)
-                transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            //TzantzaFlipBack(direction.normalized.x);
+            rb.velocity = Vector2.zero;
         }
-        
     }
 
-    private void TzantzaFlip(float xDirection)
-    {
-        //Debug.Log("TzantzaFlip xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x);
-
-        if (xDirection<0 && transform.localScale.x >0)
-        {
-            transform.localScale = new Vector3(-transform.localScale.x, transform.localScale.y, transform.localScale.z);
-
-        }else if (xDirection > 0 && transform.localScale.x < 0)
-        {
-
-            transform.localScale = new Vector3( Mathf.Abs(transform.localScale.x), transform.localScale.y, transform.localScale.z);
-        }
-
-    }
-    private void TzantzaFlipBack(float xDirection)
-    {
-
-        
-
-        // if (xDirection < 0 && transform.localScale.x > 0)
-        if (xDirection > 0 &&  transform.localScale.x < 0)
-        {
-
-            Debug.Log("Entra if 1 .. TzantzaFlipBack xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x + " // hoyustusPlayerCotroller.transform.localScale.x: " + hoyustusPlayerCotroller.transform.localScale.x);
-
-            transform.localScale = new Vector3((-1*hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
-
-        }
-        //else if (xDirection > 0 && transform.localScale.x < 0)
-        else if (xDirection < 0 && transform.localScale.x > 0)
-        {
-
-            Debug.Log("Entra if 2 .. TzantzaFlipBack xDirection: " + xDirection + " // transform.localScale.x: " + transform.localScale.x + " // hoyustusPlayerCotroller.transform.localScale.x: "+ hoyustusPlayerCotroller.transform.localScale.x);
-
-            transform.localScale = new Vector3(-1 * (-1 * hoyustusPlayerCotroller.transform.localScale.x), transform.localScale.y, transform.localScale.z);
-            
-
-        }
-
-    }
 }

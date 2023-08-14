@@ -57,7 +57,7 @@ public class LoopScenes : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    /*void Update()
     {
         if (FindObjectsOfType(GetType()).Length > 1)
             Destroy(gameObject);
@@ -88,5 +88,5 @@ public class LoopScenes : MonoBehaviour
 
 
         //Debug.Log("Aplica DontDestroyOnLoad(this.gameObject) al objeto; "+this.gameObject);
-    }
+    }*/
 }

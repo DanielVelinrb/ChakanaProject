@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -47,6 +49,7 @@ ScriptedImporter:
     flipbookRows: 0
     flipbookColumns: 0
     ignorePngGamma: 0
+    cookieMode: 0
     filterMode: 1
     aniso: 1
     mipBias: 0
@@ -87,8 +90,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
   rigSpriteImportData:
   - name: Capa 66
@@ -110,8 +113,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -29, y: 4340}
+    uvTransform: {x: 4, y: 4340}
+    spritePosition: {x: 33, y: 0}
   - name: 56 copia 7
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -131,8 +134,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2022, y: 4627}
+    uvTransform: {x: 4659, y: 6282}
+    spritePosition: {x: 2745, y: 1655}
   - name: 56 copia 6
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -152,8 +155,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4682, y: 5712}
+    uvTransform: {x: 4730, y: 7445}
+    spritePosition: {x: 85, y: 1733}
   - name: 56 copia 3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -173,8 +176,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 1930, y: 7800}
+    uvTransform: {x: 2166, y: 7800}
+    spritePosition: {x: 246, y: 0}
   - name: 57 copia 4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -194,8 +197,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -691, y: 5949}
+    uvTransform: {x: 1009, y: 7800}
+    spritePosition: {x: 1825, y: 1851}
   - name: 57 copia 3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -215,8 +218,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -869, y: 5979}
+    uvTransform: {x: -44, y: 7800}
+    spritePosition: {x: 873, y: 1821}
   - name: 57 copia 2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -236,8 +239,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3464, y: 7880}
+    uvTransform: {x: 4689, y: 7880}
+    spritePosition: {x: 1303, y: 0}
   - name: 56 copia 5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -257,8 +260,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 5087, y: 4929}
+    uvTransform: {x: 6076, y: 4929}
+    spritePosition: {x: 1089, y: 0}
   - name: 56 copia 4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -278,8 +281,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 6143, y: 4716}
+    spritePosition: {x: 33, y: 0}
   - name: 56 copia 2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -299,8 +302,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3231, y: 3214}
+    uvTransform: {x: 6114, y: 3214}
+    spritePosition: {x: 2945, y: 0}
   - name: Capa 68
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -320,8 +323,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 0, y: 0}
   - name: Lianas
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -341,8 +344,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -462, y: 5674}
+    uvTransform: {x: 4, y: 6508}
+    spritePosition: {x: 466, y: 834}
   - name: "\xC1rbol"
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -362,8 +365,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3627, y: 4}
+    uvTransform: {x: 3852, y: 4}
+    spritePosition: {x: 225, y: 0}
   - name: Capa 59
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -383,8 +386,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 4, y: 2172}
+    spritePosition: {x: 0, y: 0}
   - name: 1 copia
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -404,8 +407,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 5704, y: 4929}
+    uvTransform: {x: 6759, y: 4929}
+    spritePosition: {x: 1055, y: 0}
   - name: 1 copia 2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -425,8 +428,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 1769, y: 6508}
+    uvTransform: {x: 3386, y: 6508}
+    spritePosition: {x: 1617, y: 0}
   - name: 3 copia 19
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -446,8 +449,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3632, y: 5374}
+    uvTransform: {x: 6498, y: 5374}
+    spritePosition: {x: 2866, y: 0}
   - name: 3 copia 20
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -467,8 +470,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 5870, y: 6282}
+    spritePosition: {x: 0, y: 0}
   - name: 3 copia 4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -488,8 +491,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 1143, y: 7652}
+    uvTransform: {x: 3386, y: 7652}
+    spritePosition: {x: 2243, y: 0}
   - name: 3 copia
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -509,8 +512,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2601, y: 6743}
+    uvTransform: {x: 3386, y: 6743}
+    spritePosition: {x: 785, y: 0}
   - name: 2 copia 2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -530,8 +533,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 6105, y: 5608}
+    uvTransform: {x: 6498, y: 5608}
+    spritePosition: {x: 393, y: 0}
   - name: 2 copia 11
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -551,8 +554,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3524, y: 5138}
+    uvTransform: {x: 6176, y: 5138}
+    spritePosition: {x: 2652, y: 0}
   - name: 2 copia 5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -572,8 +575,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 5705, y: 5195}
+    uvTransform: {x: 5870, y: 6531}
+    spritePosition: {x: 165, y: 1336}
   - name: 2 copia 4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -593,8 +596,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 6651, y: 3464}
+    uvTransform: {x: 6764, y: 4716}
+    spritePosition: {x: 113, y: 1252}
   - name: 2 copia 15
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -614,8 +617,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3045, y: 4701}
+    uvTransform: {x: 6498, y: 6138}
+    spritePosition: {x: 3453, y: 1437}
   - name: 2 copia 3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -635,8 +638,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4631, y: 5332}
+    uvTransform: {x: 6833, y: 5374}
+    spritePosition: {x: 2202, y: 42}
   - name: 1 copia 5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -656,8 +659,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4247, y: 2137}
+    uvTransform: {x: 7700, y: 2137}
+    spritePosition: {x: 3453, y: 0}
   - name: 2 copia 6
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -677,8 +680,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2695, y: 7920}
+    uvTransform: {x: 3852, y: 7920}
+    spritePosition: {x: 1157, y: 0}
   - name: 1 copia 3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -698,8 +701,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4264, y: -1578}
+    uvTransform: {x: 7475, y: 4}
+    spritePosition: {x: 3211, y: 1582}
   - name: 1 copia
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -719,8 +722,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2380, y: 4070}
+    uvTransform: {x: 5803, y: 4812}
+    spritePosition: {x: 3423, y: 742}
   - name: 1 copia 2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -740,8 +743,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3344, y: 7880}
+    uvTransform: {x: 5721, y: 7880}
+    spritePosition: {x: 2384, y: 0}
   - name: 3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -761,8 +764,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4519, y: 5138}
+    uvTransform: {x: 6498, y: 5138}
+    spritePosition: {x: 1979, y: 0}
   - name: 3 copia 21
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -782,8 +785,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 6684, y: 2481}
+    uvTransform: {x: 6684, y: 4381}
+    spritePosition: {x: 0, y: 1900}
   - name: 3 copia 22
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -803,8 +806,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 6269, y: -261}
+    uvTransform: {x: 7475, y: 1148}
+    spritePosition: {x: 1206, y: 1409}
   - name: 3 copia 23
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -824,8 +827,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2626, y: 5322}
+    uvTransform: {x: 4767, y: 6795}
+    spritePosition: {x: 2141, y: 1473}
   - name: 3 copia 19
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -845,8 +848,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3542, y: 6741}
+    uvTransform: {x: 3542, y: 7800}
+    spritePosition: {x: 0, y: 1059}
   - name: 3 copia 20
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -866,8 +869,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2862, y: 5380}
+    uvTransform: {x: 6498, y: 5845}
+    spritePosition: {x: 3636, y: 469}
   - name: 3 copia 5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -887,8 +890,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4567, y: -754}
+    uvTransform: {x: 7475, y: 590}
+    spritePosition: {x: 2908, y: 1344}
   - name: 3 copia 4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -908,8 +911,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3159, y: 2711}
+    uvTransform: {x: 6684, y: 4088}
+    spritePosition: {x: 3525, y: 1377}
   - name: 3 copia
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -929,8 +932,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2267, y: 6782}
+    uvTransform: {x: 5803, y: 7440}
+    spritePosition: {x: 3536, y: 663}
   - name: Capa 58
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -950,8 +953,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3852, y: 1386}
+    uvTransform: {x: 3852, y: 2137}
+    spritePosition: {x: 0, y: 751}
   - name: 2 copia 2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -971,8 +974,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2787, y: 5366}
+    uvTransform: {x: 6498, y: 6330}
+    spritePosition: {x: 3711, y: 964}
   - name: 2 copia 11
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -992,8 +995,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2945, y: 6979}
+    uvTransform: {x: 3386, y: 6979}
+    spritePosition: {x: 441, y: 0}
   - name: 2 copia 4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1013,8 +1016,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 6587, y: 5082}
+    uvTransform: {x: 6832, y: 5138}
+    spritePosition: {x: 245, y: 56}
   - name: 2 copia 15
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1034,8 +1037,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3297, y: 8094}
+    uvTransform: {x: 3542, y: 8094}
+    spritePosition: {x: 245, y: 0}
   - name: 2 copia 3
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1055,8 +1058,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 6498, y: 5291}
+    uvTransform: {x: 6498, y: 6576}
+    spritePosition: {x: 0, y: 1285}
   - name: 1 copia 7
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1076,8 +1079,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 5354, y: 3917}
+    uvTransform: {x: 5418, y: 5234}
+    spritePosition: {x: 64, y: 1317}
   - name: Capa 57
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1097,8 +1100,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3852, y: 5752}
+    uvTransform: {x: 3852, y: 6970}
+    spritePosition: {x: 0, y: 1218}
   - name: 1 copia 8
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1118,8 +1121,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 5803, y: 2644}
+    uvTransform: {x: 5803, y: 4214}
+    spritePosition: {x: 0, y: 1573}
   - name: 1 copia 9
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1139,8 +1142,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4760, y: 5269}
+    uvTransform: {x: 5463, y: 6795}
+    spritePosition: {x: 703, y: 1526}
   - name: 1 copia 6
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1160,8 +1163,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4397, y: 5833}
+    uvTransform: {x: 4397, y: 6967}
+    spritePosition: {x: 0, y: 1137}
   - name: 1 copia 5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1181,8 +1184,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4397, y: 7072}
+    uvTransform: {x: 4397, y: 7577}
+    spritePosition: {x: 0, y: 508}
   - name: 3 copia 2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1202,8 +1205,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -46, y: 7800}
+    uvTransform: {x: 2983, y: 7800}
+    spritePosition: {x: 3029, y: 0}
   - name: 2 copia 7
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1223,8 +1226,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2337, y: 4802}
+    uvTransform: {x: 3852, y: 6282}
+    spritePosition: {x: 1515, y: 1480}
   - name: 2 copia 6
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1244,8 +1247,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 4214, y: 1613}
+    uvTransform: {x: 7700, y: 2628}
+    spritePosition: {x: 3486, y: 1015}
   - name: 1 copia 4
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1265,8 +1268,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2901, y: 3898}
+    uvTransform: {x: 6176, y: 4088}
+    spritePosition: {x: 3275, y: 190}
   - name: 57 copia 5
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1286,8 +1289,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2838, y: 5767}
+    uvTransform: {x: 5418, y: 5983}
+    spritePosition: {x: 2580, y: 216}
   - name: 57 copia
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1307,8 +1310,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 7229, y: 1525}
+    uvTransform: {x: 7475, y: 1730}
+    spritePosition: {x: 246, y: 205}
   - name: 56 copia 8
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1328,8 +1331,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 1051, y: 7032}
+    uvTransform: {x: 3386, y: 7220}
+    spritePosition: {x: 2335, y: 188}
   - name: 56 copia
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1349,8 +1352,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2512, y: 7224}
+    uvTransform: {x: 3386, y: 7436}
+    spritePosition: {x: 874, y: 212}
   - name: 56
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1370,8 +1373,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 5789, y: 3459}
+    uvTransform: {x: 6176, y: 3664}
+    spritePosition: {x: 387, y: 205}
   - name: Muro2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1391,8 +1394,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3852, y: 4576}
+    uvTransform: {x: 3852, y: 5234}
+    spritePosition: {x: 0, y: 658}
   - name: 142
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1412,8 +1415,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 2565, y: 3075}
+    uvTransform: {x: 3852, y: 3214}
+    spritePosition: {x: 1287, y: 139}
   - name: Muro1
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1433,13 +1436,14 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3852, y: 4078}
+    uvTransform: {x: 3852, y: 4217}
+    spritePosition: {x: 0, y: 139}
   characterData:
     bones: []
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   sharedRigSpriteImportData: []
   sharedRigCharacterData:
@@ -1447,10 +1451,12 @@ ScriptedImporter:
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings:
   - name: DefaultTexturePlatform
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1462,6 +1468,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: Standalone
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1473,6 +1480,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: Server
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -1492,6 +1500,8 @@ ScriptedImporter:
   paperDollMode: 0
   keepDupilcateSpriteName: 1
   skeletonAssetReferenceID: 
+  padding: 4
+  spriteSizeExpand: 0
   spriteCategoryList:
     categories: []
   spritePackingTag: 
@@ -2180,6 +2190,9 @@ ScriptedImporter:
     isVisible: 1
   sharedRigPSDLayers: []
   pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
   prefabAssetName: 

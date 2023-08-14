@@ -21,11 +21,13 @@ ScriptedImporter:
     convertToNormalMap: 0
     heightScale: 0.25
     normalMapFilter: 0
+    flipGreenChannel: 0
+    swizzle: 50462976
     isReadable: 0
     streamingMipmaps: 1
     streamingMipmapsPriority: 0
     vTOnly: 0
-    ignoreMasterTextureLimit: 0
+    ignoreMipmapLimit: 0
     nPOTScale: 1
     sRGBTexture: 1
     spriteMode: 2
@@ -47,6 +49,7 @@ ScriptedImporter:
     flipbookRows: 0
     flipbookColumns: 0
     ignorePngGamma: 0
+    cookieMode: 0
     filterMode: 1
     aniso: 1
     mipBias: 0
@@ -87,8 +90,8 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    parentGroupIndex: -1
     uvTransform: {x: 0, y: 0}
+    spritePosition: {x: 0, y: 0}
   mosaicSpriteImportData: []
   rigSpriteImportData:
   - name: Head1
@@ -961,8 +964,8 @@ ScriptedImporter:
     - {x: 69, y: 70}
     - {x: 70, y: 71}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 714, y: -2489}
+    uvTransform: {x: 1382, y: 4}
+    spritePosition: {x: 668, y: 2493}
   - name: Head2
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -1812,8 +1815,8 @@ ScriptedImporter:
     - {x: 68, y: 69}
     - {x: 69, y: 70}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 23, y: -2489}
+    uvTransform: {x: 2430, y: 4}
+    spritePosition: {x: 2407, y: 2493}
   - name: Neck
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -2312,8 +2315,8 @@ ScriptedImporter:
     - {x: 37, y: 38}
     - {x: 38, y: 39}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -990, y: -805}
+    uvTransform: {x: 811, y: 1798}
+    spritePosition: {x: 1801, y: 2603}
   - name: Right wing
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -3016,8 +3019,8 @@ ScriptedImporter:
     - {x: 52, y: 53}
     - {x: 53, y: 54}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -3433, y: 45}
+    uvTransform: {x: 4, y: 1307}
+    spritePosition: {x: 3437, y: 1262}
   - name: Left arm
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -3509,8 +3512,8 @@ ScriptedImporter:
     - {x: 31, y: 32}
     - {x: 32, y: 33}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -331, y: -468}
+    uvTransform: {x: 2052, y: 1307}
+    spritePosition: {x: 2383, y: 1775}
   - name: Body
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -4155,8 +4158,8 @@ ScriptedImporter:
     - {x: 43, y: 44}
     - {x: 44, y: 45}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -246, y: -560}
+    uvTransform: {x: 1555, y: 1307}
+    spritePosition: {x: 1801, y: 1867}
   - name: Right arm
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -4742,8 +4745,8 @@ ScriptedImporter:
     - {x: 35, y: 36}
     - {x: 36, y: 37}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 1362, y: -856}
+    uvTransform: {x: 2580, y: 1307}
+    spritePosition: {x: 1218, y: 2163}
   - name: Left foot
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -5279,8 +5282,8 @@ ScriptedImporter:
     - {x: 36, y: 37}
     - {x: 37, y: 38}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -48, y: 235}
+    uvTransform: {x: 2266, y: 1843}
+    spritePosition: {x: 2314, y: 1608}
   - name: Rigth foot
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -5784,8 +5787,8 @@ ScriptedImporter:
     - {x: 34, y: 35}
     - {x: 35, y: 36}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 550, y: 220}
+    uvTransform: {x: 2052, y: 1843}
+    spritePosition: {x: 1502, y: 1623}
   - name: Left wing
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -6487,8 +6490,8 @@ ScriptedImporter:
     - {x: 51, y: 52}
     - {x: 52, y: 53}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: 3084, y: -1317}
+    uvTransform: {x: 3477, y: 4}
+    spritePosition: {x: 393, y: 1321}
   - name: Tail
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -7298,8 +7301,8 @@ ScriptedImporter:
     - {x: 52, y: 53}
     - {x: 53, y: 54}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -2054, y: -1036}
+    uvTransform: {x: 811, y: 1307}
+    spritePosition: {x: 2865, y: 2343}
   - name: Snake
     originalName: 
     pivot: {x: 0.5, y: 0.5}
@@ -8488,8 +8491,8 @@ ScriptedImporter:
     - {x: 63, y: 64}
     - {x: 64, y: 65}
     tessellationDetail: 0
-    parentGroupIndex: -1
-    uvTransform: {x: -1184, y: -56}
+    uvTransform: {x: 4, y: 4}
+    spritePosition: {x: 1188, y: 60}
   characterData:
     bones:
     - name: bone_1
@@ -8864,6 +8867,7 @@ ScriptedImporter:
       order: 0
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   sharedRigSpriteImportData: []
   sharedRigCharacterData:
@@ -8871,10 +8875,12 @@ ScriptedImporter:
     parts: []
     dimension: {x: 0, y: 0}
     characterGroups: []
+    pivot: {x: 0, y: 0}
     boneReadOnly: 0
   platformSettings:
   - name: DefaultTexturePlatform
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 16384
     resizeAlgorithm: 0
     textureFormat: -1
@@ -8886,6 +8892,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: Standalone
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -8897,6 +8904,7 @@ ScriptedImporter:
     androidETC2FallbackOverride: 0
   - name: Server
     overridden: 0
+    ignorePlatformSupport: 0
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -8916,6 +8924,8 @@ ScriptedImporter:
   paperDollMode: 0
   keepDupilcateSpriteName: 1
   skeletonAssetReferenceID: 
+  padding: 4
+  spriteSizeExpand: 0
   spriteCategoryList:
     categories: []
   spritePackingTag: 
@@ -9044,6 +9054,9 @@ ScriptedImporter:
     isVisible: 1
   sharedRigPSDLayers: []
   pSDLayerImportSetting: []
+  importFileNodeState: 1
+  platformSettingsDirtyTick: 0
+  spriteSizeExpandChanged: 0
   generateGOHierarchy: 0
   textureAssetName: 
   prefabAssetName: 

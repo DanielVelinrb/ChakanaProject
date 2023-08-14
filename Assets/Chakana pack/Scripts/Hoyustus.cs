@@ -1,91 +1,44 @@
 using System.Collections;
-using System.Collections.Generic;
-
 using UnityEngine;
-using UnityEngine.SceneManagement; 
-using Cinemachine;
+using UnityEngine.SceneManagement;
+using System;
 
-public class Hoyustus : MonoBehaviour
+public class Hoyustus : CharactersBehaviour
 {
-
-   
-    [Header("CineMachine")]
-    [SerializeField] CinemachineVirtualCamera myVirtualCamera;
-    CinemachineComponentBase myComponentBase;
-    float myCameraDistance;
-    [SerializeField] float myCameraSensivity = 0.006f; 
-
-    public PlayerStateList pState;
-
-    [Header("X Axis Movement")]
-    [SerializeField] float walkSpeed = 25f;
-
+    [Header("Movimiento")]
+    [SerializeField] float walkSpeedGround = 9f;
+    [SerializeField] float resistenciaAire = 0.3f;
+    [SerializeField] float walkSpeed = 12f;
+    [SerializeField] private bool isWalking = false;
     [Space(5)]
 
-    [Header("Y Axis Movement")]
-    [SerializeField] float jumpSpeed = 45;
-    [SerializeField] float fallSpeed = 45;
-    [SerializeField] int jumpSteps = 20;
-    [SerializeField] int jumpThreshold = 7;
-    [Space(5)]
-
-    [Header("Attacking")]
-    [SerializeField] float timeBetweenAttack = 0.4f;
-    [SerializeField] Transform attackTransform; 
-    [SerializeField] float attackRadius = 1;
-    [SerializeField] Transform downAttackTransform;
-    [SerializeField] float downAttackRadius = 1;
-    [SerializeField] Transform upAttackTransform;
-    [SerializeField] float upAttackRadius = 1;
-    [SerializeField] LayerMask attackableLayer;
-    [Space(5)]
-
-    [Header("Recoil")]
-    [SerializeField] int recoilXSteps = 4;
-    [SerializeField] int recoilYSteps = 10;
-    [SerializeField] float recoilXSpeed = 45;
-    [SerializeField] float recoilYSpeed = 45;
+    [Header("Salto")]
+    [SerializeField] private bool isJumping = false;
+    [SerializeField] private bool isSecondJump = false;
+    [SerializeField] private float correctorSalto = 19;
+    [SerializeField] private bool firstJump = true;
+    [SerializeField] private bool secondJump = false;
+    [SerializeField] private bool saltoEspecial = false;
     [Space(5)]
 
     [Header("Ground Checking")]
-    [SerializeField] Transform groundTransform; 
-    [SerializeField] float groundCheckY = 0.2f; 
-    [SerializeField] float groundCheckX = 1;
+    [SerializeField] public float groundCheckRadius;
+    [SerializeField] Transform groundTransform;
     [SerializeField] LayerMask groundLayer;
-    [SerializeField] LayerMask enemyLayer;
-    [SerializeField] LayerMask transitionLayer;
-    [SerializeField] LayerMask transitionLayer1;
-    [SerializeField] LayerMask transitionLayer2;
-    [SerializeField] LayerMask transitionLayer3;
+    [SerializeField] LayerMask wallLayer;
+    [SerializeField] LayerMask platformLayer;
     [Space(5)]
 
-    [Header("Roof Checking")]
-    [SerializeField] Transform roofTransform; 
-    [SerializeField] float roofCheckY = 0.2f;
-    [SerializeField] float roofCheckX = 1; 
-    [Space(5)]
-
-
-    float timeSinceAttack;
-    float xAxis;
-    float yAxis;
-    float grabity;
-    int stepsXRecoiled;
-    int stepsYRecoiled;
-    int stepsJumped = 0;
-
-    public float groundCheckRadius;
-
-    Rigidbody2D rb;
     [SerializeField] Animator anim;
 
-   
-
     [Header("Audio")]
-    [SerializeField] AudioSource AudioWalking;
-    [SerializeField] AudioSource AudioJump;
-    [SerializeField] AudioSource AudioFall;
-    [SerializeField] AudioSource AmbientFlute;
+    AudioSource playerAudio;
+    [SerializeField] AudioClip AudioWalking;
+    [SerializeField] AudioClip AudioJump;
+    [SerializeField] AudioClip AudioHurt;
+    [SerializeField] AudioClip AudioSkill01;
+    [SerializeField] AudioClip AudioSkill02;
+    [SerializeField] AudioClip AudioSkill03;
 
     [SerializeField] AudioSource AudioStep1;
     [SerializeField] AudioSource AudioStep2;
@@ -99,887 +52,1028 @@ public class Hoyustus : MonoBehaviour
     [SerializeField] AudioSource GameplayIntro;
     [SerializeField] AudioSource GameplayLoop;
 
-    [SerializeField] CharacterController Controller;
+    [SerializeField] ParticleSystem ParticleTestParticleTest = null;
 
-    [Header("Particles")]
-    [SerializeField] ParticleSystem ParticleTestParticleTest =null;
+    [SerializeField] private GameObject menuMuerte;
 
-    [Header("Movement")]
-    public bool doubleJump = false;
+    //TESTING DE ESCENAS
+    [SerializeField] private GameObject controladorTesting;
+    [SerializeField] private GameObject pantallaCanvas;
 
-    
+    [Header("Variables Player")]
+    [SerializeField] private float maxVida = 1000;
+    [SerializeField] private float tiempoInvulnerabilidad = 2f;
+    [SerializeField] private float timeAir = 1.2f;
+    [SerializeField] private float currentTimeAir = 0f;
+    [Space(5)]
 
-    string nextPositionXPrefsName = "nextPositionX";
-    string nextPositionYPrefsName = "nextPositionY";
-    string firstRunPrefsName = "firstRun";
-    string flipFlagPrefsName = "flipFlag";
 
-    string escena;
+    [Header("Estados Player")]
+    [SerializeField] private int tocandoPared = 1;
+    [Space(5)]
 
-   
+
+    [Header("Dash")]
+    [SerializeField] private float timeDashCooldown = 0.6f;
+    [SerializeField] private bool dashAvailable = true;
+    [SerializeField] private bool isDashing = false;
+    [Space(5)]
+
+
+    [Header("Ataque")]
+    [SerializeField] private bool atacando = false;
+    [SerializeField] private int codigoAtaque = 0;
+    [SerializeField] private float tiempoCooldownAtaque = 0.2f;
+    [SerializeField] private bool ataqueAvailable = true;
+    [SerializeField] private GameObject[] lanzas;
+    [SerializeField] private float valorAtaqueNormal = 50;
+    [SerializeField] private float valorAtaqueHabilidadCondor = 100;
+    [SerializeField] private float valorAtaqueHabilidadLanza = 150;
+    [Space(5)]
+
+
+    [Header("Habilidades")]
+    [SerializeField] float cargaHabilidadCondor;
+    [SerializeField] float cargaHabilidadSerpiente;
+    [SerializeField] float cargaHabilidadLanza;
+    [SerializeField] float cargaCuracion;
+    [SerializeField] float aumentoBarraSalto = 10;
+    [SerializeField] float aumentoBarraDash = 15;
+    [SerializeField] float aumentoBarraAtaque = 15;
+    [SerializeField] float danioExplosionCombinacionFuego_Veneno = 35;
+    [Space(5)]
+
+
+    [Header("PREFABS")]
+    [SerializeField] private GameObject bolaVeneno;
+    [SerializeField] private Transform wallPoint;
+
+    [SerializeField] private float botonCuracion = 0f;
+    [SerializeField] private bool aplastarBotonCuracion = false;
+
+    [SerializeField] private bool realizandoHabilidadLanza = false;
+
+    [SerializeField] private bool curando = false;
+
+    [SerializeField] private int SSTEPS = 60;
+    [SerializeField] private int CSTEPS = 0;
+    private float maxHabilidad_Curacion = 100f;
+
+    float limitY = 0f;
+
+    [SerializeField] GameObject dashVfx;
+
+    [SerializeField] GameObject skillObj01;
+    [SerializeField] GameObject skillObj02;
+    [SerializeField] GameObject skillObj03;
+    [SerializeField] GameObject skillObj04;
+
+
+    public void isTocandoPared(int value)
+    {
+        tocandoPared = value;
+    }
+
+    public float getCargaHabilidadCondor()
+    {
+        return cargaHabilidadCondor;
+    }
+
+    public float getCargaHabilidadSerpiente()
+    {
+        return cargaHabilidadSerpiente;
+    }
+
+    public float getCargaHabilidadLanza()
+    {
+        return cargaHabilidadLanza;
+    }
+
+    public float getCargaCuracion()
+    {
+        return cargaCuracion;
+    }
+
+
+    public void setCargaCuracion(int e)
+    {
+        cargaCuracion += e;
+    }
+
+    public void CurarCompletamente()
+    {
+        vida = maxVida;
+    }
+
+    private void Awake()
+    {
+
+        LoadData();
+    }
+
+
+    private void LoadData()
+    {
+        if (!PlayerPrefs.HasKey("iniciado"))
+        {
+            PlayerPrefs.SetInt("iniciado", 1);
+            SaveManager.SavePlayerData(GetComponent<Hoyustus>());
+        }
+
+        PlayerData playerData = SaveManager.LoadPlayerData();
+        if (playerData != null)
+        {
+            gold = playerData.getGold();
+            ataque = playerData.getAtaque();
+            vida = playerData.getVida();
+            if (playerData.getVida() <= 0) vida = maxVida;
+            cargaHabilidadCondor = playerData.getCondor();
+            cargaHabilidadSerpiente = playerData.getSerpiente();
+            cargaHabilidadLanza = playerData.getLanza();
+            cargaCuracion = playerData.getCuracion();
+        }
+        else
+        {
+            SaveManager.SavePlayerData(GetComponent<Hoyustus>());
+        }
+    }
+
+    public void SavePlayerData()
+    {
+        SaveManager.SavePlayerData(vida, gold, cargaHabilidadCondor, cargaHabilidadSerpiente, cargaHabilidadLanza, cargaCuracion, ataque);
+    }
+
+
     void Start()
     {
-        //AudioWalking.Play();
-        if (pState == null)
+        //ESTABLECER FRAME RATE
+        Application.targetFrameRate = 90;
+
+        limitY = transform.position.y + 2;
+
+        //IGNORAR COLISIONES A LO LARGO DE LA ESCENA --> DEBERIA IR EN UN GAMEMANAGER OBJECT
+        Physics2D.IgnoreLayerCollision(11, 14, true);
+        Physics2D.IgnoreLayerCollision(13, 12, true);
+        Physics2D.IgnoreLayerCollision(13, 14, true);
+        Physics2D.IgnoreLayerCollision(13, 15, true);
+
+        //INICIALIZACION VARIABLES 
+        invulnerable = false;
+        explosionInvulnerable = "ExplosionPlayer";
+        layerObject = this.gameObject.layer;
+        aumentoDanioParalizacion = 1f;
+        lanzas = new GameObject[transform.GetChild(this.transform.childCount - 1).childCount];
+        rb = this.gameObject.GetComponent<Rigidbody2D>();
+        anim = this.gameObject.GetComponent<Animator>();
+        ataque = ataqueMax;
+        ataqueMax = ataque;
+
+        //INICIALIZACION DE LOS GAMEOBJECTS DE LAS LANZAS
+        for (int i = 0; i < lanzas.Length; i++)
         {
-            pState = GetComponent<PlayerStateList>();
+            lanzas[i] = transform.GetChild(this.transform.childCount - 1).GetChild(i).gameObject;
         }
 
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-
-        grabity = rb.gravityScale;
-
-        escena = SceneManager.GetActiveScene().name;
-
-        if (escena == "00- StartRoom 1" || escena == "05 - Room GA1" || escena == "05 - Room GA1")
-        {
-            //StartCoroutine(PlayGamePlayLoop());
-        }
-        
-        //Debug.Log("Escena: " + escena);
+        playerAudio = GetComponent<AudioSource>();
 
         //Lee datos de memoria
 
-        pState.firstRunFlag = PlayerPrefs.GetInt(firstRunPrefsName, 1);
-        pState.flipFlag = PlayerPrefs.GetInt(flipFlagPrefsName, 0);
+        //CARGA DE PREFABS
+        explosion = Resources.Load<GameObject>("Explosion");
+        bolaVeneno = Resources.Load<GameObject>("BolaVeneno");
 
-        if (pState.firstRunFlag == 0)
-        {
-            pState.x = PlayerPrefs.GetFloat(nextPositionXPrefsName, 0);
-            pState.y = PlayerPrefs.GetFloat(nextPositionYPrefsName, 0);
-            PlayerPrefs.SetInt(firstRunPrefsName, 1);
-            rb.transform.position = new Vector2(pState.x, pState.y);
-            Debug.Log("pState.flipFlag : " + pState.flipFlag);
-            if (pState.flipFlag == 1) transform.localScale = new Vector2(-1, transform.localScale.y);
+
+        SSTEPS = 65;
+
+        //TESTING PARA CAMBIO DE NIVEL
+        try {
+            pantallaCanvas = GameObject.Find("-----CANVAS");
+            Instantiate(controladorTesting, pantallaCanvas.transform.position,
+            pantallaCanvas.transform.rotation).transform.SetParent(pantallaCanvas.transform);
+        }
+        catch (Exception) {
+            Debug.Log("Corregir nombre del Objeto padre del canvas para las pruebas");
         }
     }
 
-    
+
     void Update()
     {
-        
-        
-        
-        //AudioWalking.Play();
-        GetInputs();
-        //WalkingControl();
-        Flip();
-        Walk(xAxis);
-        Recoil();
-        //Attack();
-    }
+        tocarPared();
 
-    void FixedUpdate()
-    {
-        
-        if (pState.recoilingX == true && stepsXRecoiled < recoilXSteps)
-        {
-            stepsXRecoiled++;
-        }
-        else
-        {
-            StopRecoilX();
-        }
-        if (pState.recoilingY == true && stepsYRecoiled < recoilYSteps)
-        {
-            stepsYRecoiled++;
-        }
-        else
-        {
-            StopRecoilY();
-        }
-        if (Grounded())
-        {
-            StopRecoilY();
-        }
-        if (EventTransition())
-        {
-            //Debug.Log("Disparar Transición");
-            LoadNextLevel();
-        }
-        ImproveJump();
-        Jump();
-        Walk(xAxis);
-        //WalkingControl();
+        if (Mathf.Abs(rb.velocity.y) < 0.1f)
+            Grounded();
 
-
-    }
-
-    private void ImproveJump()
-    {
-        if (rb.velocity.y < 0)
+        if (transform.parent != null)
         {
-            //rb.velocity += Vector2.up * Physics2D.gravity.y * (3f - 1) * Time.deltaTime;
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (8f - 1) * Time.deltaTime;
-            //Debug.Log("_rigidbody.velocity.y<0");
-        }
-        else if (rb.velocity.y > 0 && !Input.GetButtonDown("Jump"))
-        {
-            rb.velocity += Vector2.up * Physics2D.gravity.y * (11.5f - 1) * Time.deltaTime;
-            //rb.velocity += Vector2.up * Physics2D.gravity.y * (100.5f - 1) * Time.deltaTime;
-            //Debug.Log("_rigidbody.velocity.y >0 && !Input.GetButtonDown()");
+            limitY = transform.position.y + 10f;
         }
 
-    }
-
-
-    void Jump()
-    {
-
-        if (pState.jumping)
+        if (botonCuracion >= 0.3f)
         {
-            //Debug.Log("Entra a Jump");
-            //Debug.Log("stepsJumped: " + stepsJumped);
-            //Debug.Log("jumpSteps " + stepsJumped);
+            botonCuracion = 0f;
+            aplastarBotonCuracion = false;
+        }
 
-            
-            //if (stepsJumped < jumpSteps && !Roofed())
-            if (stepsJumped < jumpSteps)
-                {
-                rb.velocity = new Vector2(rb.velocity.x, jumpSpeed);
+        if (aplastarBotonCuracion)
+        {
+            botonCuracion += Time.deltaTime;
 
-                //TEST 10/01/2022
-                //rb.velocity += Vector2.up * Physics2D.gravity.y * (20f - 1) * Time.deltaTime;
-
-                stepsJumped++;
-            }
-            else
+            if (!curando && Input.GetButton("Jump") && cargaHabilidadCondor >= maxHabilidad_Curacion)
             {
-                StopJumpSlow();
+                StartCoroutine("habilidadCondor");
+            }
+            if (!curando && Input.GetButton("Dash") && cargaHabilidadSerpiente >= maxHabilidad_Curacion)
+            {
+                StartCoroutine("habilidadSerpiente");
+            }
+            if (!curando && Input.GetButton("Atacar") && cargaHabilidadLanza >= maxHabilidad_Curacion)
+            {
+                StartCoroutine("habilidadLanza");
             }
         }
 
-        
-        if (rb.velocity.y < -Mathf.Abs(fallSpeed))
+        if (Input.GetButtonDown("Activador_Habilidades"))
         {
-            //Debug.Log("rb.velocity.y < -Mathf.Abs(fallSpeed)");
-            rb.velocity = new Vector2(rb.velocity.x, Mathf.Clamp(rb.velocity.y, -Mathf.Abs(fallSpeed), Mathf.Infinity));
+            aplastarBotonCuracion = true;
+            //ACTIVACION DE LA CURACION
+            if (cargaCuracion >= maxHabilidad_Curacion && aplastarBotonCuracion && botonCuracion > 0f && botonCuracion < 0.3f)
+            {
+                curando = true;
+                cargaCuracion = 0;
+                playable = false;
+                aplastarBotonCuracion = false;
+                botonCuracion = 0f;
+                StartCoroutine("Curacion");
+                return;
+            }
+            return;
+        }
+
+        if (playable)
+        {
+            Falling();
+            ataqueLanza();
+            Dash();
         }
     }
 
-    void Walk(float MoveDirection)
-    {
-        //anim.SetBool("Walking", pState.walking); 
-        anim.SetBool("Walking", true);
-        Debug.Log("Walking, true");
-
-        //Rigidbody2D rigidbody2D = rb;
-        //float x = MoveDirection * walkSpeed;
-        //Vector2 velocity = rb.velocity;
-        //rigidbody2D.velocity = new Vector2(x, velocity.y);
-        if (!pState.recoilingX)
-        {
-            //Debug.Log("Entra a Walk");
-           
-
-            rb.velocity = new Vector2(MoveDirection * walkSpeed, rb.velocity.y);
-
-            //Cinemachine Zoom
-            if (escena == "14-Boss Room")
-            {
-                //Cinemachine Zoom
-                if (myComponentBase == null)
-                {
-                    myComponentBase = myVirtualCamera.GetCinemachineComponent(CinemachineCore.Stage.Body);
-                }
-
-                Debug.Log("CameraDistance: " + (myComponentBase as CinemachineFramingTransposer).m_CameraDistance);
-
-                if ((myComponentBase as CinemachineFramingTransposer).m_CameraDistance <= 20f 
-                    && (myComponentBase as CinemachineFramingTransposer).m_CameraDistance >= 8f)
-                {
-                    myCameraDistance = MoveDirection * 0.007f;
-
-                    if (myComponentBase is CinemachineFramingTransposer)
-                    {
-                        (myComponentBase as CinemachineFramingTransposer).m_CameraDistance -= myCameraDistance;
-                        //(myComponentBase as CinemachineFramingTransposer).m_ScreenY -= myCameraDistance;
-                        
-                    }
-                }
-                else
-                    (myComponentBase as CinemachineFramingTransposer).m_CameraDistance = 8;
-            }
-
-
-
-            //AudioWalking.Pause();
-            //AudioWalking.Play();
-            //AudioWalking.Play();
-
-            if (Mathf.Abs(rb.velocity.x) > 0)
-            {
-                pState.walking = true;
-                
-            }
-            else
-            {
-                pState.walking = false;
-                
-            }
-            if (xAxis > 0)
-            {
-                pState.lookingRight = true;
-            }
-            else if (xAxis < 0)
-            {
-                pState.lookingRight = false;
-            }
-           
-            anim.SetBool("Walking", pState.walking);
-        }
-
-    }
-
-    void Attack()
-    {
-        timeSinceAttack += Time.deltaTime;
-        if (Input.GetButtonDown("Jump") && timeSinceAttack >= timeBetweenAttack)
-        {
-            timeSinceAttack = 0;
-            //Attack Side
-            if (yAxis == 0 || yAxis < 0 && Grounded())
-            {
-                //anim.SetTrigger("1");
-                Collider2D[] objectsToHit = Physics2D.OverlapCircleAll(attackTransform.position, attackRadius, attackableLayer);
-                if (objectsToHit.Length > 0)
-                {
-                    pState.recoilingX = true;
-                }
-                for (int i = 0; i < objectsToHit.Length; i++)
-                {
-                   
-                    
-                }
-            }
-           
-            else if (yAxis > 0)
-            {
-                //anim.SetTrigger("2");
-                Collider2D[] objectsToHit = Physics2D.OverlapCircleAll(upAttackTransform.position, upAttackRadius, attackableLayer);
-                if (objectsToHit.Length > 0)
-                {
-                    pState.recoilingY = true;
-                }
-                for (int i = 0; i < objectsToHit.Length; i++)
-                {
-                    //Here is where you would do whatever attacking does in your script.
-                    //In my case its passing the Hit method to an Enemy script attached to the other object(s).
-                }
-            }
-           
-            else if (yAxis < 0 && !Grounded())
-            {
-                //anim.SetTrigger("3");
-                Collider2D[] objectsToHit = Physics2D.OverlapCircleAll(downAttackTransform.position, downAttackRadius, attackableLayer);
-                if (objectsToHit.Length > 0)
-                {
-                    pState.recoilingY = true;
-                }
-                for (int i = 0; i < objectsToHit.Length; i++)
-                {
-
-                    
-
-
-                    /*Instantiate(slashEffect1, objectsToHit[i].transform);
-                    if (!(objectsToHit[i].GetComponent<EnemyV1>() == null))
-                    {
-                        objectsToHit[i].GetComponent<EnemyV1>().Hit(damage, 0, -YForce);
-                    }
-
-                    if (objectsToHit[i].tag == "Enemy")
-                    {
-                        Mana += ManaGain;
-                    }*/
-                }
-            }
-
-        }
-    }
-
-    void Recoil()
-    {
-        //since this is run after Walk, it takes priority, and effects momentum properly.
-        if (pState.recoilingX)
-        {
-            if (pState.lookingRight)
-            {
-                rb.velocity = new Vector2(-recoilXSpeed, 0);
-            }
-            else
-            {
-                rb.velocity = new Vector2(recoilXSpeed, 0);
-            }
-        }
-        if (pState.recoilingY)
-        {
-            if (yAxis < 0)
-            {
-                rb.velocity = new Vector2(rb.velocity.x, recoilYSpeed);
-                rb.gravityScale = 0;
-            }
-            else
-            {
-                rb.velocity = new Vector2(rb.velocity.x, -recoilYSpeed);
-                rb.gravityScale = 0;
-            }
-
-        }
-        else
-        {
-            rb.gravityScale = grabity;
-        }
-    }
-
-    void Flip()
-    {
-        if (xAxis > 0)
-        {
-            transform.localScale = new Vector2(-1, transform.localScale.y);
-        }
-        else if (xAxis < 0)
-        {
-            transform.localScale = new Vector2(1, transform.localScale.y);
-        }
-    }
-
-    void StopJumpQuick()
-    {
-        
-        stepsJumped = 0;
-        pState.jumping = false;
-        //TEST 01/10/2022
-        //rb.velocity += Vector2.up * Physics2D.gravity.y * (70f - 1) * Time.deltaTime;
-
-        //rb.velocity = new Vector2(rb.velocity.x, -1);
-        rb.velocity = new Vector2(rb.velocity.x, 1);
-        anim.SetFloat("YVelocity", rb.velocity.y);
-        anim.SetBool("Walking", false);
-        anim.SetTrigger("Jumping");
-    }
-
-    void StopJumpSlow()
-    {
-        
-        //TEST 01/10/2022
-        //rb.velocity += Vector2.up * Physics2D.gravity.y * (70f - 1) * Time.deltaTime;
-        stepsJumped = 0;
-        pState.jumping = false;
-        anim.SetFloat("YVelocity", rb.velocity.y);
-        anim.SetTrigger("Jumping");
-    }
-
-    void StopRecoilX()
-    {
-        stepsXRecoiled = 0;
-        pState.recoilingX = false;
-    }
-
-    void StopRecoilY()
-    {
-        stepsYRecoiled = 0;
-        pState.recoilingY = false;
-    }
-
+    //***************************************************************************************************
+    //DETECCION SUELO
+    //***************************************************************************************************
     public bool Grounded()
     {
-        
-        //if (Physics2D.Raycast(groundTransform.position, Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(-groundCheckX, 0), Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(groundCheckX, 0), Vector2.down, groundCheckY, groundLayer))
-        if(Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) || Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, enemyLayer))
+
+        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer) ||
+            Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer))
         {
+            if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, platformLayer) && rb.velocity.y > 0.1f)
+                return false;
+
             anim.SetBool("Grounded", true);
+            firstJump = true;
+            secondJump = false;
+            walkSpeed = walkSpeedGround;
+            CSTEPS = 0;
+            //isJumping = false;
+            isSecondJump = true;
+            limitY = transform.position.y + 10;
             return true;
         }
         else
         {
             anim.SetBool("Grounded", false);
+            //isJumping = true;
+            walkSpeed = walkSpeedGround * (1 - resistenciaAire);
             return false;
-            
+
+        }
+    }
+
+
+    private void jump()
+    {
+
+        if (firstJump && !isTouchingRoof() && CSTEPS < SSTEPS)
+        {
+            isSecondJump = false;
+            if (Input.GetButtonUp("Jump") ||  CSTEPS >= SSTEPS || transform.position.y >= limitY || isTouchingRoof())
+            {
+                anim.Play("Caer");
+                secondJump = true;
+                firstJump = false;
+                isJumping = false;
+                CSTEPS = 0;
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+                return;
+            }
+
+            if (Input.GetButtonDown("Jump") && Grounded())
+            {
+                playerAudio.Stop();
+                playerAudio.loop = false;
+                playerAudio.clip = AudioJump;
+                playerAudio.Play();
+
+                anim.Play("Saltar");
+                isJumping = true;
+                secondJump = false;
+                rb.AddForce(new Vector2(0, 12f), ForceMode2D.Impulse);
+                cargaHabilidadCondor += aumentoBarraSalto;
+                CSTEPS++;
+                limitY = transform.position.y + 10f;
+            }
+            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY)
+            {
+                //rb.AddForce(new Vector2(0, ((6f + 0.5f * correctorSalto * ((SSTEPS - CSTEPS) * (SSTEPS - CSTEPS)) / 42) / (SSTEPS - CSTEPS) / 40)), ForceMode2D.Impulse);
+                rb.AddForce(new Vector2(0, (SSTEPS - CSTEPS)/1.1f));
+                CSTEPS++;
+            }
+
+        }
+        //DOBLE SALTO
+        else if (secondJump && !isTouchingRoof() && CSTEPS < SSTEPS)
+        {
+            if (Input.GetButtonDown("Jump") && CSTEPS == 0)
+            {
+                playerAudio.loop = false;
+                playerAudio.Stop();
+                playerAudio.clip = AudioJump;
+                playerAudio.Play();
+
+                anim.Play("Doble Salto");
+                CSTEPS = 1;
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+                rb.AddForce(new Vector2(0, -rb.velocity.y + 18), ForceMode2D.Impulse);
+                isJumping = true;
+                secondJump = true;
+                limitY = transform.position.y + 10f;
+                cargaHabilidadCondor += aumentoBarraSalto;
+                isSecondJump = true;
+            }
+            else if (Input.GetButton("Jump") && isJumping && transform.position.y < limitY && isSecondJump)
+            {
+                CSTEPS++;
+                rb.AddForce(new Vector2(0, 1.15f - (limitY - transform.position.y) / 10), ForceMode2D.Impulse);
+            }
+
+
+            if ((Input.GetButtonUp("Jump") || transform.position.y >= limitY || CSTEPS > SSTEPS || isTouchingRoof()) && isSecondJump)
+            {
+                if (!atacando)
+                    anim.Play("Caer");
+                CSTEPS = 0;
+                isJumping = false;
+                secondJump = false;
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+                return;
+            }
+
+        }
+
+        if (Input.GetButtonUp("Jump") && CSTEPS < SSTEPS)
+        {
+            if (!atacando)
+                anim.Play("Caer");
+
+            if (firstJump)
+            {
+                secondJump = true;
+                firstJump = false;
+                isSecondJump = true;
+            }
+            else if (isSecondJump)
+            {
+                secondJump = false;
+                isSecondJump = false;
+            }
+            if (!isJumping)
+                rb.velocity = new Vector2(rb.velocity.x, 0);
+            isJumping = false;
+            CSTEPS = 0;
+            return;
+
         }
 
     }
 
-    public bool EventTransition()
+    private void LateUpdate()
     {
-        //isGrounded = Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, groundLayer);
-        
-        //if (Physics2D.Raycast(groundTransform.position, Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(-groundCheckX, 0), Vector2.down, groundCheckY, groundLayer) || Physics2D.Raycast(groundTransform.position + new Vector3(groundCheckX, 0), Vector2.down, groundCheckY, groundLayer))
-        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer))
+        if (playable)
         {
-            //Debug.Log("transitionLayer " + transitionLayer.ToString());
-            return true;
-            
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer1))
-        {
-            //Debug.Log("transitionLayer1 " + transitionLayer1.ToString());
-            return true;
-            
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer2))
-        {
-            Debug.Log("transitionLayer2 " + transitionLayer2.ToString());
-            return true;
-
-        }else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer3))
-        {
-            //Debug.Log("transitionLayer3 " + transitionLayer3.ToString());
-            return true;
-
-        }
-        else return false;
-
-    }
-    public void LoadNextLevel()
-    {
-        
-        string transitionLayerExit;
-
-        if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer))
-        {
-            //Debug.Log("transitionLayer " + transitionLayer.ToString());
-            transitionLayerExit = "Transition";
-
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer1))
-        {
-            //Debug.Log("transitionLayer1 " + transitionLayer1.ToString());
-            transitionLayerExit = "Transition1";
-
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer2))
-        {
-            //Debug.Log("transitionLayer2 " + transitionLayer2.ToString());
-            transitionLayerExit = "Transition2";
-
-        }
-        else if (Physics2D.OverlapCircle(groundTransform.position, groundCheckRadius, transitionLayer3))
-        {
-            //Debug.Log("transitionLayer3 " + transitionLayer3.ToString());
-            transitionLayerExit = "Transition3";
-
-        }
-        else transitionLayerExit = "";
-
-        //Debug.Log("transitionLayerExit " + transitionLayerExit);
-
-        escena = SceneManager.GetActiveScene().name;
-        //Debug.Log("Escena: " + escena);
-        //Debug.Log("transitionLayerExit: " + transitionLayerExit);
-
-        if (escena == "00- StartRoom 1")
-        {
-            //Debug.Log("transitionLayerExit " + transitionLayerExit);
-
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -29.344f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(1+1);
-            }
-                
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 29.576f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(5+1);
-            }
-                
-            
-        }
-        if (escena == "01-Level 1")
-        {
-            //Debug.Log("transitionLayerExit " + transitionLayerExit);
-
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -21.880f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(0+1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -55.934f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(2+1);
-            }
-            else if (transitionLayerExit == "Transition2")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -137.45f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 41.468f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(3+1);
-            }
-            else if (transitionLayerExit == "Transition3")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -137.45f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(3+1);
-            }
-        }
-        if (escena == "03-Room 3")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, -56.341f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-            SceneManager.LoadScene(1+1);
-        }
-        if (escena == "04-Level 2")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -133.46f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(1+1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -132.69f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 41.422f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(1+1);
-            }
-            else if (transitionLayerExit == "Transition2")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.845f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -8.851f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(4+1);
-            }
-        }
-        if (escena == "05-Room GA1")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, -188.567f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(3+1);
-        }
-        if (escena == "06- Room 6")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.160f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(0+1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -27.914f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 38.672f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(6+1);
-            }
-                
-            
-        }
-        if (escena == "07-Room 7")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 100.690f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(5+1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 63.045f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.417f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(7+1);
-
-            }
-
-        }
-        if (escena == "08-Room 8")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 45.333f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -4.418f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(6+1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.160f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(8+1);
-            }
-            else if (transitionLayerExit == "Transition2")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 119.625f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(12+1);
-            }
-        }
-        if (escena == "09-Room 9")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 70.635f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(9+1);
-
-                
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 114.528f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -51.827f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(7+1);
-
-            }
-
-        }
-        if (escena == "10-Room 10 - 11")
-        {
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -21.880f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(8+1);
-            }
-            else if (transitionLayerExit == "Transition1")
-            {
-               PlayerPrefs.SetFloat(nextPositionXPrefsName, -55.934f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, 14.672f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(10+1);
-            }
-            else if (transitionLayerExit == "Transition2")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -21.880f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.0776f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(11+1);
-            }
-        }
-        if (escena == "12-Room 12")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, -0.653f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, -82.824f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-            SceneManager.LoadScene(9+1);
-        }
-        if (escena == "13- SaveRoom")
-        {
-            //Debug.Log("transitionLayerExit " + transitionLayerExit);
-
-            if (transitionLayerExit == "Transition")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, 70.211f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -102.327f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 0);
-                SceneManager.LoadScene(9+1);
-            }
-
-            else if (transitionLayerExit == "Transition1")
-            {
-                PlayerPrefs.SetFloat(nextPositionXPrefsName, -64.304f);
-                PlayerPrefs.SetFloat(nextPositionYPrefsName, -103.677f);
-                PlayerPrefs.SetInt(firstRunPrefsName, 0);
-                PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-                SceneManager.LoadScene(13+1);
-            }
-         }
-        if (escena == "13-Room 13")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, 151.409f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, -26.827f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(7+1);
-        }
-        if (escena == "14-Boss Room")
-        {
-            PlayerPrefs.SetFloat(nextPositionXPrefsName, 19.340f);
-            PlayerPrefs.SetFloat(nextPositionYPrefsName, -9.077f);
-            PlayerPrefs.SetInt(firstRunPrefsName, 0);
-            PlayerPrefs.SetInt(flipFlagPrefsName, 1);
-            SceneManager.LoadScene(11+1);
+            jump();
         }
     }
 
-    public bool Roofed()
+
+    void FixedUpdate()
     {
-        
-        if (Physics2D.Raycast(roofTransform.position, Vector2.up, roofCheckY, groundLayer) || Physics2D.Raycast(roofTransform.position + new Vector3(roofCheckX, 0), Vector2.up, roofCheckY, groundLayer) || Physics2D.Raycast(roofTransform.position + new Vector3(roofCheckX, 0), Vector2.up, roofCheckY, groundLayer))
+        if (playable && !atacando)
         {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
-
-    void GetInputs()
-    {
-        
-        yAxis = Input.GetAxis("Vertical");
-        xAxis = Input.GetAxis("Horizontal");
-
-        
-        if (yAxis > 0.25)
-        {
-            yAxis = 1;
-        }
-        else if (yAxis < -0.25)
-        {
-            yAxis = -1;
-        }
-        else
-        {
-            yAxis = 0;
+            Walk();
         }
 
-        if (xAxis > 0.25)
+        if (vida <= 0)
         {
-            xAxis = 1;
-        }
-        else if (xAxis < -0.25)
-        {
-            xAxis = -1;
-        }
-        else
-        {
-            xAxis = 0;
+            StartCoroutine(Muerte());
         }
 
+        anim.SetBool("Walking", rb.velocity.x != 0);
         anim.SetBool("Grounded", Grounded());
         anim.SetFloat("YVelocity", rb.velocity.y);
-
-         
-        //if (Input.GetButtonDown("Jump") && Grounded()) DNA 11/01/2022 SE AUMENTA VARIABLE DOUBLE JUMP 
-            if (Input.GetButtonDown("Jump") && Grounded() || doubleJump==true)
-        {
-            //Debug.Log("Entra a Jumping :" + pState.jumping);
-            pState.jumping = true;
-            anim.SetTrigger("Jumping");
-            anim.SetBool("Jump", Grounded());
-            //AudioJump.Play();
-        }
-
-        if (!Input.GetButton("Jump") && stepsJumped < jumpSteps && stepsJumped > jumpThreshold && pState.jumping)
-        {
-            //Debug.Log("Entra a StopJumpQuick :" + pState.jumping);
-            StopJumpQuick();
-        }
-        else if (!Input.GetButton("Jump") && stepsJumped < jumpThreshold && pState.jumping)
-        {
-            //Debug.Log("Entra a StopJumpSlow :" + pState.jumping);
-            StopJumpSlow();
-        }
+        anim.SetFloat("XVelocity", rb.velocity.x);
+        anim.SetFloat("Vida", vida);
+        anim.SetFloat("Ataque", ataque);
+        anim.SetInteger("Gold", gold);
+        anim.SetBool("Dashing", isDashing);
+        anim.SetBool("Atacando", atacando);
+        anim.SetInteger("CA", codigoAtaque);
+        anim.SetBool("SecondJump", secondJump);
+        anim.SetBool("Jumping", isJumping);
 
     }
 
-    void WalkingControl()
+
+    protected override void Recoil(int direccion, float fuerzaRecoil)
     {
-        //Debug.Log("Entra a la sección de get button");
+        playable = false;
 
-        if (Input.GetButtonDown("Horizontal"))// && Grounded() )//&& pState.walking == true)
+        if (isJumping)
         {
-            //Debug.Log("Entra a la sección de get button Horizontal Input");
-            if (Grounded())
-            {
-                //Debug.Log("Entra a la sección de get button Horizontal Input Grounded");
-
-                AudioWalking.Play();
-            }
-            else
-            {
-
-                //Debug.Log("Entra a la sección de get button Horizontal Input Not Grounded");
-                AudioWalking.Stop();
-            }
-
+            rb.velocity = Vector3.zero;
+            rb.gravityScale = 2f;
+            rb.AddForce(new Vector2(direccion * 2.6f * fuerzaRecoil, rb.gravityScale), ForceMode2D.Impulse);
         }
-        else if (!Grounded())
+        else
         {
-            if (Grounded())
-            {
-                //Debug.Log("Entra a la sección de get button Horizontal Input !Grounded Grounded");
-
-                AudioWalking.Play();
-            }
-            else
-            {
-
-                //Debug.Log("Entra a la sección de get button Horizontal Input !Grounded !Grounded");
-                AudioWalking.Stop();
-            }
+            rb.AddForce(new Vector2(direccion * 4 * fuerzaRecoil, rb.gravityScale * 2), ForceMode2D.Impulse);
         }
 
-        if (Input.GetButtonDown("Horizontal") && Grounded())
-        {
-            AudioWalking.Play();
-        }
+        Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 19 , true);
+        EstablecerInvulnerabilidades(layerObject);
+    }
 
-        if (Input.GetButtonUp("Horizontal"))
-        {
-            AudioWalking.Stop();
-        }
-        if (Input.GetButtonDown("Jump") && Grounded())
-        {
-            AudioWalking.Stop();
-        }
+
+    protected override sealed void QuitarInvulnerabilidades(int layerObject)
+    {
+        invulnerable = false;
+        Physics2D.IgnoreLayerCollision(3, layerObject, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 12, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 15, false);
+        Physics2D.IgnoreLayerCollision(layerObject, 19, false);
 
     }
+
+
+    //***************************************************************************************************
+    //CURACION DEL PLAYER
+    //***************************************************************************************************
+    private IEnumerator Curacion()
+    {
+        rb.constraints = RigidbodyConstraints2D.FreezeAll;
+        Destroy(Instantiate(skillObj04, transform.position, Quaternion.identity), 1);
+        //CAMBIO A LA ANIMACION
+        yield return new WaitForSeconds(0.5f);
+        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        playable = true;
+        vida += 350;
+        curando = false;
+    }
+
+
+    //***************************************************************************************************
+    //HABILIDAD CONDOR
+    //***************************************************************************************************
+    private IEnumerator habilidadCondor()
+    {
+        Destroy(Instantiate(skillObj02, transform.position, Quaternion.identity), 1.2f);
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
+        cargaHabilidadCondor = 0f;
+        playable = false;
+        rb.velocity = Vector2.zero;
+        rb.gravityScale = 0f;
+        cargaCuracion += 30;
+
+        //SE MODIFICA EL GAMEOBJECT DEL PREFAB EXPLOSION Y SE LO INSTANCIA
+        explosion.GetComponent<ExplosionBehaviour>().modificarValores(15, valorAtaqueHabilidadCondor, 15, 12, "Viento", explosionInvulnerable);
+        GameObject extraExplosion = Instantiate(explosion, transform.position + Vector3.up * 1f, Quaternion.identity);
+        extraExplosion.name += "Player";
+
+        //SE ESPERA HASTA QUE SE GENERE ESTA EXPLOSION
+        yield return new WaitForSeconds(1.2f);
+
+        //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
+        playable = true;
+        rb.gravityScale = 2;
+    }
+
+
+    private IEnumerator habilidadSerpiente()
+    {
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
+        playable = false;
+        dashAvailable = false;
+        cargaHabilidadSerpiente = 0f;
+        cargaCuracion += 30;
+
+        //SE GENERA OTRO OBJETO A PARTIR DEL PREFAB BOLAVENENO Y SE LO MODIFICA
+        GameObject bolaVenenoGenerada = Instantiate(bolaVeneno, transform.position + Vector3.up, Quaternion.identity);
+        yield return new WaitForEndOfFrame();
+        bolaVenenoGenerada.GetComponent<BolaVeneno>().aniadirFuerza(-transform.localScale.x, 11);
+        yield return new WaitForEndOfFrame();
+
+        //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
+        dashAvailable = true;
+        playable = true;
+        vidaMax = 1000;
+
+    }
+
+
+    private IEnumerator habilidadLanza()
+    {
+        Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1.2f);
+
+        Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 19, true);
+        EstablecerInvulnerabilidades(layerObject);
+        invulnerable = true;
+        cargaCuracion += 30;
+
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
+        atacando = true;
+        codigoAtaque = 3;
+        realizandoHabilidadLanza = true;
+        cargaHabilidadLanza = 0f;
+        playable = false;
+        rb.velocity = Vector2.zero;
+        rb.gravityScale = 0f;
+
+        //ACTIVACION Y MODIFICACION DE LA LANZA
+        lanzas[0].tag = "Fuego";
+        ataque = valorAtaqueHabilidadLanza;
+        ataque = 150;
+        lanzas[0].SetActive(true);
+
+
+        IEnumerator movimientoHabilidadLanza()
+        {
+            rb.AddForce(new Vector2(transform.localScale.x * 20, 0), ForceMode2D.Impulse);
+            yield return new WaitForSeconds(1);
+            rb.velocity = Vector2.zero;
+            realizandoHabilidadLanza = false;
+            //isDashing = false;
+        }
+        StartCoroutine(movimientoHabilidadLanza());
+        yield return new WaitUntil(() => (tocandoPared == 0 || realizandoHabilidadLanza == false));
+        atacando = false;
+        codigoAtaque = 0;
+
+        //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
+        QuitarInvulnerabilidades(layerObject);
+        invulnerable = false;
+        realizandoHabilidadLanza = false;
+        playable = true;
+        rb.gravityScale = 2f;
+        ataque = valorAtaqueNormal;
+        ataque = ataqueMax;
+
+        //DESACTIVACION Y MODIFICACION DE LA LANZA
+        lanzas[0].SetActive(false);
+        lanzas[0].tag = "Untagged";
+        lanzas[0].layer = 14;
+    }
+
+
+    public void setPlayable(bool state)
+    {
+        playable = state;
+    }
+
+    public void setGold(int e)
+    {
+        gold += e;
+    }
+
+    public void setAumentoDanioParalizacion(float value)
+    {
+        aumentoDanioParalizacion = value;
+    }
+
+
+    //***************************************************************************************************
+    //DETECCION DE COLISIONES
+    //***************************************************************************************************
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+
+        //COLISIONES PARA OBJETOS TAGUEADOS COMO ENEMY
+        if (collision.gameObject.layer == 3 || collision.gameObject.layer == 18 || collision.gameObject.layer == 19)
+        {
+            try
+            {
+                //DETECCION DE DEL CUERPO DEL ENEMIGO
+                if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
+                {
+                    //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO VIENTO
+                    invulnerable = true;
+                    recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
+                    StartCoroutine(cooldownRecibirDanio((int)-Mathf.Sign(collision.transform.position.x - transform.position.x),
+                        collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    collisionElementos_1_1_1(collision);
+                    return;
+                }
+
+            }
+            catch (Exception){}
+
+            if (!invulnerable)
+                collisionElementos_1_1_1(collision);
+
+        }
+    }
+
+    protected override sealed IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
+    {
+        Recoil(direccion, fuerzaRecoil);
+        if (vida <= 0)
+        {
+            yield break;
+        }
+
+        playerAudio.loop = false;
+        playerAudio.Stop();
+        playerAudio.clip = AudioHurt;
+        playerAudio.Play();
+
+        //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
+        yield return new WaitForSeconds(0.5f);
+        //SE DETIENE EL RECOIL
+        rb.velocity = Vector2.zero;
+        yield return new WaitForEndOfFrame();
+        //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
+        playable = true;
+        yield return new WaitForSeconds(0.7f);
+        QuitarInvulnerabilidades(layerObject);
+
+    }
+
+
+    public bool IsInvulnerable() {
+        return invulnerable;
+    }
+
+
+    private void OnCollisionStay2D(Collision2D collision)
+    {
+        if (collision.gameObject.layer == 3 || collision.gameObject.layer == 18 || collision.gameObject.layer == 19)
+        {
+            try
+            {
+                //DETECCION DEL CUERPO DEL ENEMIGO
+                if (!invulnerable && collision.gameObject.transform.parent.name == "-----ENEMIES")
+                {
+                    recibirDanio(collision.gameObject.GetComponent<CharactersBehaviour>().getAtaque());
+                    StartCoroutine(cooldownRecibirDanio((int)-Mathf.Sign(collision.transform.position.x - transform.position.x),
+                        collision.gameObject.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    collisionElementos_1_1_1(collision);
+                }
+
+            }
+            catch (Exception) { }
+        }
+    }
+    //***************************************************************************************************
+    //DETECCION DE TRIGGERS
+    //***************************************************************************************************
+    private new void OnTriggerEnter2D(Collider2D collider)
+    {
+        base.OnTriggerEnter2D(collider);
+
+        //DETECCIONS DE TRIGGERS DE OBJETOS TAGUEADOS COMO ENEMY
+        if (collider.gameObject.layer == 3 || collider.gameObject.layer == 18 || collider.gameObject.layer == 19)
+        {
+            //direccion nos dara la orientacion de recoil al sufrir danio
+            int direccion = 1;
+            if (collider.transform.position.x > gameObject.transform.position.x)
+            {
+                direccion = -1;
+            }
+            else
+            {
+                direccion = 1;
+            }
+
+            try
+            {
+                //PROYECTILES
+                if (collider.gameObject.transform.parent == null)
+                {
+                    triggerElementos_1_1_1(collider);
+                }
+                //DETECCION DE OBJETOS HIJOS DEL ENEMIGO
+                else if (!invulnerable && (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && (collider.gameObject.layer == 3 || collider.gameObject.layer == 19)))
+                {
+                    recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
+                    StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    triggerElementos_1_1_1(collider);
+                }
+                else if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 18 && isDashing)
+                {
+                    invulnerable = true;
+                    recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
+                    StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
+                    triggerElementos_1_1_1(collider);
+                }
+                return;
+
+            }
+            catch (Exception){}
+        }
+        if (!invulnerable && !collider.gameObject.name.Contains("Player"))
+            triggerElementos_1_1_1(collider);
+
+    }
+
+
+    private bool isTouchingRoof()
+    {
+        if (Physics2D.OverlapCircle(groundTransform.position + Vector3.up * 2.5f, groundCheckRadius, groundLayer))
+        {
+            return true;
+        }
+        return false;
+    }
+
+
+    private void tocarPared()
+    {
+        tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x * 0.5f +
+            Vector3.up * 1.25f, wallPoint.position - Vector3.right * transform.localScale.x * 0.5f - Vector3.up * 1.25f, wallLayer)) ? 0 : 1;
+
+    }
+
+
+    //***************************************************************************************************
+    //CORRUTINA DE MUERTE
+    //***************************************************************************************************
+    private IEnumerator Muerte()
+    {
+
+        //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA CORRUTINA
+        playable = false;
+        //Corregir los tiempos en relacion a la muerte por danio fisico y por estas afectaciones elementales
+        yield return new WaitForSeconds(0.5f);
+
+        rb.velocity = Vector2.zero;
+        this.gameObject.tag = "Untagged";
+        this.gameObject.layer = 0;
+        Physics2D.IgnoreLayerCollision(0, 3, true);
+        //GUARDADO DE INFORMACION
+        //gold = 100;
+        //SaveManager.SavePlayerData(maxVida, gold, SceneManager.GetActiveScene().name);
+        //Da inicio a la animacion
+        //WaitForSeconds deberia tener el tiempo de la animacion para desplegar el menu
+        yield return new WaitForSeconds(1f);
+        //Desplegar el menu
+
+        SavePlayerData();
+        SaveManager.SavePlayerData(GetComponent<Hoyustus>());
+
+        Time.timeScale = 0;
+        menuMuerte.SetActive(true);
+        //La correccion de las acciones tomadas al "revivir" se implementaran despues al contar con el resto de mecanicas implementadas
+        //Es decir la posicion en el checkpoint, vida y gold
+    }
+
+
+    //***************************************************************************************************
+    //MOVIMIENTO
+    //***************************************************************************************************
+    private void Walk()
+    {
+        float h = Input.GetAxis("Horizontal");
+
+        if (h >= -0.10 && h <= 0.10)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+            isWalking = false;
+            if (playerAudio.clip == AudioWalking) playerAudio.Stop();
+            return;
+        }
+        else if (h < -0.10)
+        {
+            transform.localScale = new Vector3(-1, 1, 1);
+        }
+        else if (h > 0.10)
+        {
+            transform.localScale = new Vector3(1, 1, 1);
+        }
+        isWalking = true;
+        if (isJumping)
+        {
+            if(playerAudio.clip == AudioWalking) playerAudio.Stop();
+        }
+        else if (!isJumping)
+        {
+            if (!playerAudio.isPlaying)
+            {
+                playerAudio.loop = true;
+                playerAudio.clip = AudioWalking;
+                playerAudio.Play();
+            }
+        }
+
+        rb.velocity = new Vector2(h * walkSpeed * (1 - afectacionViento) * tocandoPared, rb.velocity.y);
+        if (rb.velocity == Vector2.zero) playerAudio.Stop();
+    }
+
+
+    //***************************************************************************************************
+    //AUMENTO DE LA VELOCIDAD DE CAIDA DE LOS OBJETOS
+    //***************************************************************************************************
+    void Falling()
+    {
+        if (rb.velocity.y < 0) rb.velocity -= Vector2.up * Time.deltaTime * -Physics2D.gravity * 9f;
+    }
+
+
+    //***************************************************************************************************
+    //Ataque Lanza
+    //***************************************************************************************************
+    private void ataqueLanza()
+    {
+
+        if (ataqueAvailable && Input.GetButtonDown("Atacar") && playable)
+        {
+            atacando = true;
+            //playable = false;
+            int index = 0;  //SE REFIERE AL INDICE DE LOS HIJOS DEL OBJETO LANZA DE HOYUSTUS
+            //VOLVERLAS VARIABLES GLOBALES
+            float h = Input.GetAxis("Horizontal");
+            float v = Input.GetAxis("Vertical");
+
+            if (v == 0)
+            {
+                //Aniadir el pequenio impulso de movimiento
+                anim.Play("Lanza Lateral");
+                codigoAtaque = 4;
+            }
+            else if (v != 0 && h == 0)
+            {
+                //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
+                if (v > 0)
+                {
+                    index = 1;
+                    codigoAtaque = 5;
+                }
+                else if (v <= 0 && !Grounded())
+                {
+                    index = 2;
+                    codigoAtaque = 6;
+                }
+                else if (v <= 0 && Grounded())
+                {
+                    anim.Play("Lanza Lateral");
+                    codigoAtaque = 4;
+                }
+            }
+            else if (v != 0 && h != 0)
+            {
+                //VERIFIFICAR QUE SOLO FUNCIONE AL ESTAR EN EL AIRE Y AGREGAR LAS POSICIONES VERTICALES DE ATAQUE.
+                if (Math.Abs(v) > Math.Abs(h))
+                {
+                    if (v > 0)
+                    {
+                        index = 1;
+                        codigoAtaque = 5;
+                    }
+                    else if (v <= 0 && !Grounded())
+                    {
+                        index = 2;
+                        codigoAtaque = 6;
+                    }
+                    else if (v <= 0 && Grounded())
+                    {
+                        anim.Play("Lanza Lateral");
+                        codigoAtaque = 4;
+                    }
+                }
+                else
+                {
+                    //Aniadir el pequenio impulso de movimiento
+                    //lanza.SetActive(true);
+                    anim.Play("Lanza Lateral");
+                    codigoAtaque = 4;
+                }
+            }
+
+            ataqueAvailable = false;
+            StartCoroutine(lanzaCooldown(index));
+        }
+    }
+
+
+    //***************************************************************************************************
+    //CooldownAtaque
+    //***************************************************************************************************
+    private IEnumerator lanzaCooldown(int index)
+    {
+        lanzas[index].SetActive(true);
+        atacando = true;
+        yield return new WaitForSeconds(0.2f);
+        atacando = false;
+        playable = true;
+        codigoAtaque = 0;
+        lanzas[index].SetActive(false);
+        anim.Play("Idel");
+        yield return new WaitForSeconds(tiempoCooldownAtaque);
+        ataqueAvailable = true;
+    }
+
+
+    //***************************************************************************************************
+    //DASH
+    //***************************************************************************************************
+    private void Dash()
+    {
+        if (dashAvailable && Input.GetButtonDown("Dash") && tocandoPared != 0)
+        {
+            transform.parent = null;
+            invulnerable = true;
+            playable = false;
+            dashAvailable = false;
+            rb.velocity = Vector2.zero;
+            rb.gravityScale = 0f;
+            StartCoroutine(dashCooldown());
+
+        }
+    }
+
+
+    //***************************************************************************************************
+    //COOLDOWN DASH
+    //***************************************************************************************************
+    private IEnumerator dashCooldown()
+    {
+        Destroy(Instantiate(dashVfx, transform.position, Quaternion.identity, transform), 0.5f);
+
+        isDashing = true;
+        Physics2D.IgnoreLayerCollision(3, layerObject, true);
+        Physics2D.IgnoreLayerCollision(layerObject, 19, true);
+        EstablecerInvulnerabilidades(layerObject);
+        anim.Play("Dash");
+        cargaHabilidadSerpiente += aumentoBarraDash;
+
+        IEnumerator movimientoDash()
+        {
+            rb.AddForce(new Vector2(transform.localScale.x * 45, 0), ForceMode2D.Impulse);
+            yield return new WaitForSeconds(0.2f);
+            //rb.velocity = Vector2.zero;
+            rb.gravityScale = 2;
+            isDashing = false;
+        }
+        StartCoroutine(movimientoDash());
+        yield return new WaitUntil(() => (tocandoPared == 0 || isDashing == false));
+        rb.gravityScale = 2;
+        isDashing = false;
+        playable = true;
+        yield return new WaitForEndOfFrame();
+        yield return new WaitForSeconds(0.1f);
+        QuitarInvulnerabilidades(layerObject);
+        yield return new WaitForSeconds(timeDashCooldown);
+        dashAvailable = true;
+    }
+
+
+    public void cargaLanza()
+    {
+        cargaHabilidadLanza += aumentoBarraAtaque;
+    }
+
+
+    public void ejecucionCorrutinaPrueba(int direccion, float fuerza) {
+        StartCoroutine(cooldownRecibirDanio(direccion, fuerza));
+    }
+
 
     void PlayJumpAudio()
     {
-        AudioJump.Play();
+        //AudioJump.Play();
 
     }
     void PlayFallAudio()
     {
-        AudioFall.Play();
-
+        //AudioFall.Play();
     }
 
-    
+    public float getMaxVida()
+    {
+        return maxVida;
+    }
 
-    
+
 
     IEnumerator PlayGamePlayLoop()
     {
@@ -1026,20 +1120,4 @@ public class Hoyustus : MonoBehaviour
         ParticleTestParticleTest.Play();
     }
 
-void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackTransform.position, attackRadius);
-        Gizmos.DrawWireSphere(downAttackTransform.position, downAttackRadius);
-        Gizmos.DrawWireSphere(upAttackTransform.position, upAttackRadius);
-        //Gizmos.DrawWireCube(groundTransform.position, new Vector2(groundCheckX, groundCheckY));
-
-        Gizmos.DrawLine(groundTransform.position, groundTransform.position + new Vector3(0, -groundCheckY));
-        Gizmos.DrawLine(groundTransform.position + new Vector3(-groundCheckX, 0), groundTransform.position + new Vector3(-groundCheckX, -groundCheckY));
-        Gizmos.DrawLine(groundTransform.position + new Vector3(groundCheckX, 0), groundTransform.position + new Vector3(groundCheckX, -groundCheckY));
-
-        Gizmos.DrawLine(roofTransform.position, roofTransform.position + new Vector3(0, roofCheckY));
-        Gizmos.DrawLine(roofTransform.position + new Vector3(-roofCheckX, 0), roofTransform.position + new Vector3(-roofCheckX, roofCheckY));
-        Gizmos.DrawLine(roofTransform.position + new Vector3(roofCheckX, 0), roofTransform.position + new Vector3(roofCheckX, roofCheckY));
-    }
 }
