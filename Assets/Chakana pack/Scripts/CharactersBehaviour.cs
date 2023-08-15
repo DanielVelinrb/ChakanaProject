@@ -61,7 +61,6 @@ public class CharactersBehaviour : MonoBehaviour
             yield break;
         }
 
-        //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
         yield return new WaitForSeconds(0.2f);
         //SE DETIENE EL RECOIL
         rb.velocity = Vector2.zero;

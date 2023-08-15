@@ -53,7 +53,7 @@ public class Chontacuro1 : Enemy
     private void FixedUpdate()
     {
         detectarPiso();
-        if ((transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x) && Physics2D.OverlapCircle(transform.position + Vector3.down * 0.5f, 0.2f, groundLayer)) {
+        if ((transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x)) {
             Flip();
         }
 
@@ -114,6 +114,13 @@ public class Chontacuro1 : Enemy
             if (!detectarPiso() && !Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
                 Vector3.Distance(transform.position, collider.transform.position), wallLayer))
             {
+                if (collider.gameObject.transform.position.x < transform.position.x)
+                {
+                    objetivo = limit1;
+                }
+                else { 
+                    objetivo = limit2;
+                }
                 speed = 0;
             }
             else if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),

@@ -163,8 +163,6 @@ public class ApallimayArco : Apallimay
             if (!Physics2D.Raycast(transform.position, orientacionDeteccionPlayer(collider.transform.position), distanciaPlayer, wallLayer))
             {
                 jugadorDetectado = true;
-                if(playable)
-                    rb.velocity = Vector3.zero;
                 if (collider.transform.position.x <= transform.position.x)
                 {
                     transform.localScale = new Vector3(-1, 1, 1);

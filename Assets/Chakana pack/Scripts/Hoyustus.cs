@@ -593,20 +593,20 @@ public class Hoyustus : CharactersBehaviour
 
     private IEnumerator habilidadLanza()
     {
-        Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1.2f);
-
         Physics2D.IgnoreLayerCollision(3, layerObject, true);
         Physics2D.IgnoreLayerCollision(layerObject, 19, true);
         EstablecerInvulnerabilidades(layerObject);
+        realizandoHabilidadLanza = true;
+        playable = false;
+        Destroy(Instantiate(skillObj01, transform.position, Quaternion.identity, transform), 1.2f);
+
         invulnerable = true;
         cargaCuracion += 30;
 
         //SE MODIFICAN ESTAS VARIABLES PARA NO INTERFERIR EL TIEMPO DE ACCION DE LA HABILIDAD
         atacando = true;
         codigoAtaque = 3;
-        realizandoHabilidadLanza = true;
         cargaHabilidadLanza = 0f;
-        playable = false;
         rb.velocity = Vector2.zero;
         rb.gravityScale = 0f;
 
@@ -626,13 +626,12 @@ public class Hoyustus : CharactersBehaviour
             //isDashing = false;
         }
         StartCoroutine(movimientoHabilidadLanza());
-        yield return new WaitUntil(() => (tocandoPared == 0 || realizandoHabilidadLanza == false));
+        yield return new WaitUntil(() => (tocandoPared == 0 || !realizandoHabilidadLanza));
         atacando = false;
         codigoAtaque = 0;
 
         //SE VUELVEN A ESTABLECER LOS VALORES DE JUEGO NORMAL
         QuitarInvulnerabilidades(layerObject);
-        invulnerable = false;
         realizandoHabilidadLanza = false;
         playable = true;
         rb.gravityScale = 2f;
@@ -709,14 +708,18 @@ public class Hoyustus : CharactersBehaviour
 
         //Aniadir el brillo (Mientras se lo tenga se lo simulara con el cambio de la tonalidad del sprite)
         yield return new WaitForSeconds(0.5f);
-        //SE DETIENE EL RECOIL
-        rb.velocity = Vector2.zero;
-        yield return new WaitForEndOfFrame();
-        //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
-        playable = true;
+        if(!realizandoHabilidadLanza)
+        {
+            //SE DETIENE EL RECOIL
+            rb.velocity = Vector2.zero;
+            yield return new WaitForEndOfFrame();
+            //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
+            playable = true;
+        }
         yield return new WaitForSeconds(0.7f);
         QuitarInvulnerabilidades(layerObject);
-
+        if(realizandoHabilidadLanza)
+            invulnerable = true;
     }
 
 
@@ -781,6 +784,7 @@ public class Hoyustus : CharactersBehaviour
                 }
                 else if (collider.gameObject.transform.parent.parent.name == "-----ENEMIES" && collider.gameObject.layer == 18 && isDashing)
                 {
+                    Debug.Log("imposible dashear");
                     invulnerable = true;
                     recibirDanio(collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().getAtaque());
                     StartCoroutine(cooldownRecibirDanio(direccion, collider.gameObject.transform.parent.GetComponent<CharactersBehaviour>().fuerzaRecoil));
@@ -810,7 +814,7 @@ public class Hoyustus : CharactersBehaviour
     private void tocarPared()
     {
         tocandoPared = (Physics2D.OverlapArea(wallPoint.position + Vector3.right * transform.localScale.x * 0.5f +
-            Vector3.up * 1.25f, wallPoint.position - Vector3.right * transform.localScale.x * 0.5f - Vector3.up * 1.25f, wallLayer)) ? 0 : 1;
+            Vector3.up * 1.25f, wallPoint.position + Vector3.right * transform.localScale.x * 0.1f - Vector3.up * 1.25f, wallLayer)) ? 0 : 1;
 
     }
 
@@ -1054,7 +1058,8 @@ public class Hoyustus : CharactersBehaviour
 
 
     public void ejecucionCorrutinaPrueba(int direccion, float fuerza) {
-        StartCoroutine(cooldownRecibirDanio(direccion, fuerza));
+        if(!realizandoHabilidadLanza) 
+            StartCoroutine(cooldownRecibirDanio(direccion, fuerza));
     }
 
 
@@ -1115,7 +1120,7 @@ public class Hoyustus : CharactersBehaviour
     {
         AudioStep8.Play();
     }
-    void PlayParticles()
+    public void PlayParticles()
     {
         ParticleTestParticleTest.Play();
     }

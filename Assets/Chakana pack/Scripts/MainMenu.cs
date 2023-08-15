@@ -64,7 +64,7 @@ public class MainMenu : MonoBehaviour
         {
             anyKeyPress = true;
             
-            Debug.Log("Se ha presionado una tecla en el teclado: " + e.keyCode);
+            //Debug.Log("Se ha presionado una tecla en el teclado: " + e.keyCode);
         }
     }
 
