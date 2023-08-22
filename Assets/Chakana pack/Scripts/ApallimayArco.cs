@@ -43,7 +43,7 @@ public class ApallimayArco : Apallimay
         Muerte();
         if (Grounded()) {
             Flip();
-            detectarPiso();
+            DetectarPiso();
             if (!jugadorDetectado && playable)
                 Move();
         }
@@ -119,12 +119,12 @@ public class ApallimayArco : Apallimay
                 direccion = 1;
             }
 
-            triggerElementos_1_1_1(collider);
+            TriggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-                recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
             return;
         }
@@ -146,7 +146,7 @@ public class ApallimayArco : Apallimay
 
         if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
         {
-            triggerElementos_1_1_1(collider);
+            TriggerElementos_1_1_1(collider);
         }
     }
 
@@ -250,12 +250,12 @@ public class ApallimayArco : Apallimay
 
         if (!collision.gameObject.name.Contains("Enemy"))
         {
-            collisionElementos_1_1_1(collision);
+            CollisionElementos_1_1_1(collision);
         }
     }
 
 
-    public bool detectarPiso()
+    public bool DetectarPiso()
     {
         if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer))
         {

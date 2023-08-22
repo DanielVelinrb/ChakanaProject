@@ -24,7 +24,7 @@ public class ManagerPeleaMapinguari : MonoBehaviour
        if(Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.K))
         {
             EliminarLogicaPlataformas();
-            GameObject.Find("Mapinguari").GetComponent<Mapianguari>().recibirDanio(3000);
+            GameObject.Find("Mapinguari").GetComponent<Mapianguari>().RecibirDanio(3000);
         } 
     }
 }

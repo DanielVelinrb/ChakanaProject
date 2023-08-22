@@ -25,7 +25,7 @@ public class Pinchos02 : MonoBehaviour
 
     IEnumerator DelayDmg(Hoyustus player)
     {
-        player.recibirDanio(200);
+        player.RecibirDanio(200);
 
         Rigidbody2D rb = player.GetComponent<Rigidbody2D>();
 

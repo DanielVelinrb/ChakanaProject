@@ -34,13 +34,14 @@ public class Tzantza : Enemy
         fuerzaRecoil = 2f;
         ataqueDisponible = true;
         vidaMax = vida;
+        anim = GetComponent<Animator>();
     }
 
 
     void Update()
     {
         Muerte();
-
+        anim.SetBool("Atacando", atacando);
         if (siguiendo && playable) {
             Move();
         }
@@ -89,12 +90,12 @@ public class Tzantza : Enemy
             {
                 direccion = 1;
             }
-            triggerElementos_1_1_1(collider);
+            TriggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-                recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
                 charAudio.loop = false;
                 charAudio.Stop();
                 charAudio.clip = audioHurt;
@@ -109,7 +110,7 @@ public class Tzantza : Enemy
 
 
         if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18){
-            triggerElementos_1_1_1(collider);
+            TriggerElementos_1_1_1(collider);
         }
     }
 
@@ -134,7 +135,7 @@ public class Tzantza : Enemy
     {
         if (!collision.gameObject.name.Contains("Enemy"))
         {
-            collisionElementos_1_1_1(collision);
+            CollisionElementos_1_1_1(collision);
         }
     }
 

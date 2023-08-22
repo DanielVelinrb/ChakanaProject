@@ -180,7 +180,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2817813146465231809, guid: da28829cce8256a4d82e1b8e4c5d8c3c, type: 3}
       propertyPath: m_SortingOrder
-      value: 12
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2817813146465231811, guid: da28829cce8256a4d82e1b8e4c5d8c3c, type: 3}
       propertyPath: m_RootOrder
@@ -251,6 +251,10 @@ PrefabInstance:
     - target: {fileID: 2564053331382944234, guid: 1f8b09efed838ac449a6a7c5bc5b8ebb, type: 3}
       propertyPath: EmissionModule.enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2564053331382990922, guid: 1f8b09efed838ac449a6a7c5bc5b8ebb, type: 3}
+      propertyPath: m_SortingOrder
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 2564053331382990922, guid: 1f8b09efed838ac449a6a7c5bc5b8ebb, type: 3}
       propertyPath: m_Materials.Array.size

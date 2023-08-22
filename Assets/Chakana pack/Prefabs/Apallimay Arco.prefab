@@ -145,7 +145,7 @@ Transform:
   - {fileID: 854937195}
   - {fileID: 399219049880165367}
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &844127857088110854
 MonoBehaviour:
@@ -161,7 +161,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 0
   vida: 175
-  defensa: 0
   ataque: 50
   ataqueMax: 50
   estadoViento: 0
@@ -176,7 +175,6 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
-  inmuneDash: 0
   vientoFX: {fileID: 8488511914963349049, guid: 863658301b00bb0438abc11b66b4e10c, type: 3}
   fuegoFX: {fileID: 8392620470651161117, guid: 19e5b513668805f43a5d9ab53d1b6013, type: 3}
   venenoFX: {fileID: 100000, guid: e410ec8ad62ab3f46becd4fc37508a01, type: 3}
@@ -354,7 +352,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6108470176081746140}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1, y: -1.2, z: 0}
+  m_LocalPosition: {x: 0.8, y: -1.2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

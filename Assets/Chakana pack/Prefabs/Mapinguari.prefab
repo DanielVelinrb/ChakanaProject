@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 627248762632895300}
   - component: {fileID: 627248762632895301}
   - component: {fileID: 7218420099408483804}
+  - component: {fileID: 7737763353764628324}
   m_Layer: 3
   m_Name: Mapinguari
   m_TagString: Untagged
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 627248762632895303}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -30, y: 5.96, z: 0}
-  m_LocalScale: {x: 5, y: 5, z: 1}
+  m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 627248764119676890}
@@ -58,7 +59,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -79,7 +80,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 8
-  m_Sprite: {fileID: -9095717837082945937, guid: 207ee8102dd4143d288186ef0be518ee, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4292aee0872aa4940a24b1d45b7738ba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -104,8 +105,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 0
   vida: 3000
-  defensa: 0
-  ataque: 0
+  ataque: 100
   ataqueMax: 0
   estadoViento: 0
   estadoFuego: 0
@@ -119,7 +119,6 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: ExplosionPlayer
-  inmuneDash: 0
   vientoFX: {fileID: 8488511914963349049, guid: 863658301b00bb0438abc11b66b4e10c, type: 3}
   fuegoFX: {fileID: 7027134392714734881, guid: 0c2c2396bdabb334cb5f32942120a349, type: 3}
   venenoFX: {fileID: 5977171225950289729, guid: 86e8a8e38a4c3c54e8de87dc974dcf69, type: 3}
@@ -147,6 +146,7 @@ MonoBehaviour:
   cambiandoPlataforma: 0
   t1: 0.5
   t2: 1
+  anim: {fileID: 0}
   tiempoDentroRango: 0
   tiempoFueraRango: 0
   minX: 0
@@ -157,26 +157,26 @@ MonoBehaviour:
   campoVision: {fileID: 0}
   cuerpo: {fileID: 0}
   movementVelocity: 6
-  valorAtaqueBasico: 20
-  valorAtaqueEspecial: 30
+  valorAtaqueBasico: 100
+  valorAtaqueEspecial: 150
   coolDownAtaque: 2
   bolaVeneno: {fileID: 3988393829037458745, guid: c761468e5f4db0b46ab63295081c2160, type: 3}
   nuevaPlataforma: 0
   plataformaActual: 0
   charcoVeneno: {fileID: 8081575625336725374, guid: 3f708db572fd8254fbdd12681c730e63, type: 3}
   plantaVeneno: {fileID: 180760010574049810, guid: 1ab353cd6d8b22649879576b95489255, type: 3}
+  levelController: {fileID: 0}
   usandoAtaqueEspecial: 0
+  realizandoAB: 0
+  realizandoAT: 0
+  pruebaAtaqueEspecial: 0
+  isDead: 0
   ataqueEspecialDisponible: 1
-  cambioPlataformaDisponible: 1
-  timerAtaqueEspecial: 0
   lifeBar: {fileID: 0}
   audioHurt: {fileID: 8300000, guid: 7b4d9fb14f223de419b31e8a0b1aeee5, type: 3}
   audioAtk: {fileID: 8300000, guid: a7eca54cf13ef104a992e4112f217f78, type: 3}
   audioScream: {fileID: 8300000, guid: 46b7ef0821fb5004b8a4e74dc3b86619, type: 3}
   danioPlantaVeneno: 80
-  xCharco: 10
-  yCharco: 1
-  escala: 3
   rangoCercania: 12
   reduccionTiempoAtaqueDistancia: 0
 --- !u!50 &627248762632895300
@@ -191,7 +191,7 @@ Rigidbody2D:
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 80
+  m_Mass: 6
   m_LinearDrag: 0
   m_AngularDrag: 0.05
   m_GravityScale: 2
@@ -239,7 +239,7 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1, y: 2}
+  m_Size: {x: 6, y: 6}
   m_Direction: 0
 --- !u!82 &7218420099408483804
 AudioSource:
@@ -337,6 +337,27 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+--- !u!95 &7737763353764628324
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 627248762632895303}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 0}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &627248763571091569
 GameObject:
   m_ObjectHideFlags: 0
@@ -402,7 +423,7 @@ BoxCollider2D:
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: 1, y: 0}
+  m_Offset: {x: 3, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -413,7 +434,7 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 2, y: 1.9}
+  m_Size: {x: 6, y: 5.7}
   m_EdgeRadius: 0
 --- !u!50 &627248763571091566
 Rigidbody2D:
@@ -517,5 +538,5 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   serializedVersion: 2
-  m_Size: {x: 30, y: 2}
+  m_Size: {x: 80, y: 6}
   m_EdgeRadius: 0

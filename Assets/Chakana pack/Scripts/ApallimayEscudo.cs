@@ -42,13 +42,15 @@ public class ApallimayEscudo : Apallimay
     void Update()
     {
         Muerte();
-        if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x,
+        if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.3f,
             wallDetector.position + Vector3.down * 0.5f, wallLayer) && playable)
-            detectarPared();
+            DetectarPared();
         if (Grounded() && !atacando)
         {
-            detectarPiso(distanciaPlayer, siguiendo);
-            if (playable)
+            DetectarPiso(distanciaPlayer, siguiendo);
+            if (CambioOrientacionDisponible(0.6f) && siguiendo)
+                Flip();
+            else if (CambioOrientacionDisponible(0.1f) && !siguiendo)
                 Flip();
             if (playable)
                 Move();
@@ -136,12 +138,12 @@ public class ApallimayEscudo : Apallimay
                 direccion = 1;
             }
 
-            triggerElementos_1_1_1(collider);
+            TriggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-                recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+                RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             }
             return;
         }
@@ -153,7 +155,7 @@ public class ApallimayEscudo : Apallimay
 
         if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
         {
-            triggerElementos_1_1_1(collider);
+            TriggerElementos_1_1_1(collider);
         }
     }
 
@@ -162,7 +164,7 @@ public class ApallimayEscudo : Apallimay
 
         if (collider.gameObject.layer == 11)
         {
-            float orientacionDeteccion = orientacionDeteccionPlayer(collider.transform.position.x);
+            float orientacionDeteccion = OrientacionDeteccionPlayer(collider.transform.position.x);
             distanciaPlayer = Vector3.Distance(transform.position, collider.transform.position);
 
             Debug.DrawLine(transform.position, collider.transform.position, Color.red);
@@ -203,11 +205,11 @@ public class ApallimayEscudo : Apallimay
         }
         else if (!collision.gameObject.name.Contains("Enemy"))
         {
-            collisionElementos_1_1_1(collision);
+            CollisionElementos_1_1_1(collision);
         }
     }
 
-    public bool detectarPiso(float option = 0, bool detectandoPlayer = false)
+    public bool DetectarPiso(float option = 0, bool detectandoPlayer = false)
     {
         if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer))
         {
@@ -233,7 +235,7 @@ public class ApallimayEscudo : Apallimay
     }
 
 
-    public void detectarPared()
+    public void DetectarPared()
     {
 
         if (transform.localScale.x == -1)

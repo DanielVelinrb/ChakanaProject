@@ -30,7 +30,7 @@ public class BolaVenenoArbolMapinguari : BolaVeneno
     }
 
 
-    public void instanciarValores(GameObject explosion) {
+    public void InstanciarValores(GameObject explosion) {
         this.explosion = explosion;
         this.explosion.GetComponent<ExplosionBehaviour>().modificarValores(6, 25, 6, 12, "Veneno", "ExplosionEnemy");
     }
@@ -40,7 +40,6 @@ public class BolaVenenoArbolMapinguari : BolaVeneno
     {
         if (collision.gameObject.tag == "Player" || collision.gameObject.layer == 6 || collision.gameObject.layer == 16)
         {
-            Debug.Log(collision.gameObject.name);
             Instantiate(explosion, transform.position, Quaternion.identity);
             Destroy(gameObject);
         }

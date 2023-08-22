@@ -28,7 +28,7 @@ public class WeaponCollect : MonoBehaviour
 
     private void Update()
     {
-        if(Input.GetAxis("Interact") == 1 && isActive && !isOn)
+        if(Input.GetButtonDown("Interact")&& isActive && !isOn)
         {
             isOn = true;
             txtUse.SetActive(false);

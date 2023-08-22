@@ -221,9 +221,13 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "Huyustus, enviado de los Dioses, para cumplir tu\r\nmisi\xF3n yo
-          te proveer\xE9 de armas, pero antes debes\r\ncumplir con varias misiones
-          para poder comprarlas."
+        value: 'Huyustus, envoy of the Gods, in order to fulfill your mission
+
+          your
+          mission I will provide you with weapons, but first you must fulfill several
+
+          fulfill
+          several missions to be able to buy them.'
         type: 0
         typeString: 
       - title: Sequence
@@ -278,8 +282,13 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "Deber\xE1s recoger dos hongos luminosos gigantes, una\r\nra\xEDz
-          del \xE1rbol sagrado de Ayahuasca y traerme la mascara\r\nde un Dios sagrado."
+        value: 'You will have to collect two giant luminous mushrooms, a root of
+          the sacred
+
+          root of the sacred Ayahuasca tree and bring me the
+          mask of a sacred god.
+
+          of a sacred god.'
         type: 0
         typeString: 
       - title: Sequence
@@ -334,7 +343,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: "Completa tu misi\xF3n y regresa."
+        value: Complete your mission and return.
         type: 0
         typeString: 
       - title: Sequence
@@ -487,12 +496,12 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: 'Huyustus, enviado de los Dioses, has completados las
+        value: 'Huyustus, envoy of the Gods, you have completed the missions.
 
-          misiones.
-          Te felicito valiente guerrero.
+          missions.
+          I congratulate you brave warrior.
 
-          Escoge tus armas para la batalla.'
+          Choose your weapons for battle.'
         type: 0
         typeString: 
       - title: Sequence
@@ -645,7 +654,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Consigue todos los objetos y vuelve a hablar conmigo
+        value: Get all the items and talk to me again.
         type: 0
         typeString: 
       - title: Sequence
@@ -667,8 +676,8 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 160
-        y: 80
+        x: 159
+        y: 79
         width: 160
         height: 30
     entryGroups: []
@@ -798,7 +807,7 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: Deseas algo?
+        value: Do you want something?
         type: 0
         typeString: 
       - title: Sequence

@@ -42,7 +42,7 @@ public class ProyectilMovUniforme : MonoBehaviour
         if (collision.gameObject.CompareTag("Player") || collision.gameObject.layer == 6 || collision.gameObject.layer == 16)
         {
             if (collision.gameObject.CompareTag("Player") && !collision.gameObject.GetComponent<Hoyustus>().IsInvulnerable()) {
-                collision.gameObject.GetComponent<Hoyustus>().recibirDanio(danio);
+                collision.gameObject.GetComponent<Hoyustus>().RecibirDanio(danio);
                 collision.gameObject.GetComponent<Hoyustus>().ejecucionCorrutinaPrueba((transform.position.x <= collision.transform.position.x) ? 1 : -1, 2f);
 
             }

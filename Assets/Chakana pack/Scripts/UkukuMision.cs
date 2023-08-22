@@ -33,7 +33,7 @@ public class UkukuMision : MonoBehaviour
 
     void Update()
     {
-        if (isActive && Input.GetAxis("Interact") == 1)
+        if (isActive && Input.GetButtonDown("Interact"))
         {
             int e = PlayerPrefs.GetInt("ukukuM");
             e += 1;

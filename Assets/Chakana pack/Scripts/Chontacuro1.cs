@@ -11,7 +11,6 @@ public class Chontacuro1 : Enemy
 
     [SerializeField] private Vector3 limit1, limit2;
     [SerializeField] private float posY;
-    [SerializeField] Animator anim;
 
     [SerializeField] Transform groundDetector;
     [SerializeField] Transform wallDetector;
@@ -52,46 +51,46 @@ public class Chontacuro1 : Enemy
 
     private void FixedUpdate()
     {
-        detectarPiso();
-        if ((transform.position.x + 1.3f < objetivo.x || transform.position.x - 1.3f > objetivo.x)) {
-            Flip();
-        }
-
-        if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x,
-            wallDetector.position + Vector3.down * 0.5f, wallLayer) && playable)
-            detectarPared();
-
         if (playable)
         {
-            Move();            
+            DetectarPiso();
+
+            if (Physics2D.OverlapCircle(transform.position + Vector3.down * 0.5f, 0.2f, groundLayer)) {
+                if (CambioOrientacionDisponible(0.8f) && siguiendo)
+                    Flip();
+                else if (CambioOrientacionDisponible(0.2f) && !siguiendo)
+                    Flip();
+            }
         }
+        if (Physics2D.OverlapArea(wallDetector.position + Vector3.up * 0.5f + Vector3.right * transform.localScale.x * 0.2f,
+            wallDetector.position + Vector3.down * 0.5f, wallLayer) && playable)
+            DetectarPared();
+
+        if (playable)
+            Move();            
 
         if (rb.velocity.y < 0)
-        {
             Falling();
-        }
 
         if (vida <= 0)
-        {
             Muerte();
-        }
     }
 
 
-    private void detectarPared() {
+    private void DetectarPared() {
         if (transform.localScale.x == -1)
         {
-            limit1 = transform.position + Vector3.right;
+            limit1 = transform.position + Vector3.right * 0.1f;
             objetivo = limit1;
             direction = 1;
         }
         else
         {
-            limit2 = transform.position - Vector3.right;
+            limit2 = transform.position - Vector3.right * 0.1f;
             objetivo = limit2;
             direction = -1;
         }
-
+        Flip();
 
         if (siguiendo)
         {
@@ -111,7 +110,7 @@ public class Chontacuro1 : Enemy
         if (collider.gameObject.CompareTag("Player"))
         {
             Debug.DrawLine(transform.position, collider.transform.position, Color.red);
-            if (!detectarPiso() && !Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
+            if (!DetectarPiso() && !Physics2D.Raycast(transform.position, transform.right * OrientacionDeteccionPlayer(collider.transform.position.x),
                 Vector3.Distance(transform.position, collider.transform.position), wallLayer))
             {
                 if (collider.gameObject.transform.position.x < transform.position.x)
@@ -123,14 +122,14 @@ public class Chontacuro1 : Enemy
                 }
                 speed = 0;
             }
-            else if (!Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
+            else if (!Physics2D.Raycast(transform.position, transform.right * OrientacionDeteccionPlayer(collider.transform.position.x),
                 Vector3.Distance(transform.position, collider.transform.position), wallLayer))
             {
                 speed = seguimientoSpeed;
                 siguiendo = true;
                 objetivo = collider.transform.position;
             }
-            else if (Physics2D.Raycast(transform.position, transform.right * orientacionDeteccionPlayer(collider.transform.position.x),
+            else if (Physics2D.Raycast(transform.position, transform.right * OrientacionDeteccionPlayer(collider.transform.position.x),
                 Vector3.Distance(transform.position, collider.transform.position), wallLayer)) {
                 siguiendo = false;
                 speed = movementSpeed;
@@ -138,14 +137,18 @@ public class Chontacuro1 : Enemy
         }
     }
 
-    public bool detectarPiso() {
+    public bool DetectarPiso(int option = 0) {
         if (!Physics2D.OverlapCircle(groundDetector.position, 0.2f, groundLayer)) {
-            if (direction == - 1) {
-                limit1 = transform.position + Vector3.right * 0.1f;
-            }
-            else if(direction == 1)
+            if (option == 0)
             {
-                limit2 = transform.position - Vector3.right * 0.1f;
+                if (direction == -1)
+                {
+                    limit1 = transform.position + Vector3.right * 0.1f;
+                }
+                else if (direction == 1)
+                {
+                    limit2 = transform.position - Vector3.right * 0.1f;
+                }
             }
             return false;
         }
@@ -182,13 +185,14 @@ public class Chontacuro1 : Enemy
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && transform.position.y - 3 < posY)
+        if ((collision.gameObject.layer == 6 || collision.gameObject.layer == 17) && transform.position.y - 1 < posY)
         {
             speed = movementSpeed;
             posY = transform.position.y;
             limit1 = transform.position + Vector3.left * 5.5f;
             limit2 = transform.position + Vector3.right * 5.5f;
-            objetivo = limit2;
+            if(!siguiendo)
+                objetivo = limit2;
 
             if (limit1.x >= limit2.x)
             {
@@ -233,7 +237,7 @@ public class Chontacuro1 : Enemy
         {
             StartCoroutine(cooldownRecibirDanio((int)Mathf.Sign(collider.transform.position.x - transform.position.x), 1));
             collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-            recibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+            RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
             charAudio.loop = false;
             charAudio.Stop();
             charAudio.clip = audioHurt;
@@ -246,7 +250,7 @@ public class Chontacuro1 : Enemy
             else if (counterEstados > 0)
             {
                 counterEstados += 1;
-                this.combinacionesElementales();
+                this.CombinacionesElementales();
                 return;
             }
             estadoViento = true;
@@ -259,7 +263,7 @@ public class Chontacuro1 : Enemy
             else if (counterEstados > 0)
             {
                 counterEstados += 10;
-                combinacionesElementales();
+                CombinacionesElementales();
                 return;
             }
             estadoFuego = true;
@@ -269,7 +273,7 @@ public class Chontacuro1 : Enemy
     }
 
 
-    private new void combinacionesElementales()
+    private void CombinacionesElementales()
     {
         if (counterEstados == 11)
         {

@@ -33,7 +33,7 @@ public class ElementalAltar : MonoBehaviour
 
     void Update()
     {
-        if (isIn && Input.GetAxis("Interact") == 1)
+        if (isIn && Input.GetButtonDown("Interact"))
         {
             altarFX.SetActive(true);
             txtUse.SetActive(false);

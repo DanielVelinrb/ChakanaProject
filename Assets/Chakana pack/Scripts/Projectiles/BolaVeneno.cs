@@ -9,9 +9,7 @@ public class BolaVeneno : MonoBehaviour
     protected Rigidbody2D rb;
     protected float tiempoEliminacion = 5f;
     protected GameObject explosion;
-    private bool activado = true;
     [SerializeField] private GameObject charco;
-    private bool residuos = false;
 
     void Start()
     {
@@ -28,19 +26,17 @@ public class BolaVeneno : MonoBehaviour
             if (this.gameObject.layer == 0) {
                 Destroy(charco);
                 Destroy(this.gameObject);
-                //Destroy(this.gameObject);
             }
             //ENEMY
             else if (this.gameObject.layer == 3) {
                 //EXPLOSION
                 Destroy(charco);
                 Destroy(this.gameObject);
-                //Destroy(this.gameObject);
             }
         }
     }
 
-    public void aniadirFuerza(float direccion, int layer) {
+    public void AniadirFuerza(float direccion, int layer) {
         transform.gameObject.layer = layer;
         gameObject.tag = "Veneno";
         rb.WakeUp();
@@ -48,7 +44,7 @@ public class BolaVeneno : MonoBehaviour
     }
 
 
-    public void aniadirFuerza(float direccion, int layer, float velocityX, float velocityY, GameObject explosion)
+    public void AniadirFuerza(float direccion, int layer, float velocityX, float velocityY, GameObject explosion)
     {
         transform.gameObject.layer = layer;
         gameObject.tag = "Veneno";
@@ -83,10 +79,8 @@ public class BolaVeneno : MonoBehaviour
             Destroy(this.gameObject);
         }
         else if (this.gameObject.layer == 11 && (collider.gameObject.layer == 6 || collider.gameObject.layer == 16 || collider.gameObject.layer == 17)) {
-            //this.GetComponent<CircleCollider2D>().isTrigger = false;
             tiempoEliminacion = 5;
             //GENERAR CHARCO
-            Debug.Log("Generar Charco");
             StartCoroutine(GenerarCharco(transform.localPosition));
         }
     }
@@ -100,19 +94,14 @@ public class BolaVeneno : MonoBehaviour
         {
             tiempoEliminacion = 5;
             //GENERAR CHARCO
-            Debug.Log("Generar Charco");
-            //Destroy(gameObject);
             StartCoroutine(GenerarCharco(transform.localPosition));
 
         }
         else if (collision.gameObject.layer == 3 || collision.gameObject.layer == 19) {
             //GENERAR BOLA DE VENENO DESCENDENTE
-            residuos = true;
             tiempoEliminacion = 50f;
             this.GetComponent<CircleCollider2D>().isTrigger = true;
             rb.velocity = new Vector2(0f, rb.velocity.y);
-
-            //Destroy(this.gameObject);
         }
 
     }
