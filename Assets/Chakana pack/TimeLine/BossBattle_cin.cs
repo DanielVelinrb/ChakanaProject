@@ -9,6 +9,7 @@ public class BossBattle_cin : MonoBehaviour
     [SerializeField] PlayableDirector director;
     [SerializeField] GameObject player;
     [SerializeField] AudioSource roca;
+    [SerializeField] Mapianguari boss;
 
     void Start()
     {
@@ -29,6 +30,7 @@ public class BossBattle_cin : MonoBehaviour
         yield return new WaitForSeconds(0.6f);
 
         player.GetComponent<Hoyustus>().enabled = true;
+        boss.enabled = true;
         player.GetComponent<Rigidbody2D>().constraints = RigidbodyConstraints2D.FreezeRotation;
 
         yield return new WaitForSeconds(1f);

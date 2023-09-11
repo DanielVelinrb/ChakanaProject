@@ -81,15 +81,8 @@ public class Tzantza : Enemy
 
         if (collider.gameObject.layer == 14 && playable)
         {
-            int direccion = 1;
-            if (collider.transform.position.x > gameObject.transform.position.x)
-            {
-                direccion = -1;
-            }
-            else
-            {
-                direccion = 1;
-            }
+            int direccion = -(int)OrientacionDeteccionPlayer(collider.transform.position.x);
+
             TriggerElementos_1_1_1(collider);
             StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)

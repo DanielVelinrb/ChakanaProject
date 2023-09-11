@@ -1,4 +1,5 @@
-using UnityEngine; 
+using UnityEngine;
+using System.Collections;
 
 
 public class Enemy : CharactersBehaviour
@@ -29,6 +30,25 @@ public class Enemy : CharactersBehaviour
     {
         Color[] colores = { Color.white, Color.black, Color.blue, Color.yellow, Color.red };
         GetComponent<SpriteRenderer>().color = colores[color];
+    }
+
+    protected override IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
+    {
+        Recoil(direccion, fuerzaRecoil);
+        if (vida <= 0)
+        {
+            yield break;
+        }
+
+        yield return new WaitForSeconds(0.2f);
+        rb.velocity = Vector2.zero;
+        yield return new WaitForSeconds(0.2f);
+        playable = true;
+    }
+
+    protected void PlayAnimation(string animation)
+    {
+        anim.Play(animation);
     }
 
 }

@@ -236,8 +236,10 @@ public class Chontacuro1 : Enemy
         if (collider.gameObject.layer == 14 && playable)
         {
             StartCoroutine(cooldownRecibirDanio((int)Mathf.Sign(collider.transform.position.x - transform.position.x), 1));
-            collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
-            RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+            if (collider.transform.parent != null) {
+                collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
+                RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
+            }
             charAudio.loop = false;
             charAudio.Stop();
             charAudio.clip = audioHurt;

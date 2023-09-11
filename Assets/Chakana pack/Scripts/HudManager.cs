@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.InputSystem;
 
 public class HudManager : MonoBehaviour
 {
@@ -21,6 +22,8 @@ public class HudManager : MonoBehaviour
     float weapon;
     float maxValue;
     float gold;
+
+    private bool isVibration = false;
 
     private void Awake()
     {
@@ -142,5 +145,35 @@ public class HudManager : MonoBehaviour
     public float GetCuracion()
     {
         return mana;
+    }
+
+    public void SetVibration()
+    {
+        if (!isVibration)
+        {
+            StartCoroutine(StartVibration(1,1));
+            isVibration = true;
+        }
+    }
+
+    IEnumerator StartVibration(float e, float i)
+    {
+        int playerIndex = 0;
+        float vibrationDuration = e;
+        float intensity = i;
+
+        var gamepads = Gamepad.all;
+
+        if (gamepads.Count > 0)
+        {
+            Gamepad gamepad = Gamepad.all[playerIndex];
+            if (gamepad != null)
+            {
+                gamepad.SetMotorSpeeds(intensity, intensity);
+                yield return new WaitForSeconds(vibrationDuration);
+                gamepad.SetMotorSpeeds(0f, 0f);
+                isVibration = false;
+            }
+        }
     }
 }

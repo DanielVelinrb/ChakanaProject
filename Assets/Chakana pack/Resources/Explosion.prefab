@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: -5016722111583459961}
   m_Layer: 12
   m_Name: Explosion
-  m_TagString: Veneno
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -81,10 +81,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c09aa410572fa3d448810015efed4f71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  limitRadio: 6
-  indiceExplosion: 6
-  danioExplosion: 25
+  radio: 15
+  indiceExplosion: 15
+  danioExplosion: 1
   tipoExplosion: ExplosionEnemy
+  isDynamic: 1
+  tiempoDestruccionEstatico: 0.4
 --- !u!212 &-5016722111583459961
 SpriteRenderer:
   m_ObjectHideFlags: 0

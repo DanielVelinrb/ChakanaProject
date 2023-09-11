@@ -62,8 +62,7 @@ public class BolaVeneno : MonoBehaviour
         this.GetComponent<CircleCollider2D>().enabled = false;
         GameObject charcoGenerado = Instantiate(charco, transform.position, Quaternion.identity);
         charcoGenerado.name = "CharcoVenenoPlayer";
-        //charcoGenerado.layer = 11;
-        yield return new WaitForSeconds(5f);
+        yield return new WaitForSeconds(1.5f);
         Destroy(charcoGenerado);
         Destroy(this.gameObject);
     }
@@ -78,10 +77,17 @@ public class BolaVeneno : MonoBehaviour
             Destroy(charco);
             Destroy(this.gameObject);
         }
-        else if (this.gameObject.layer == 11 && (collider.gameObject.layer == 6 || collider.gameObject.layer == 16 || collider.gameObject.layer == 17)) {
+        else if (this.gameObject.layer == 14 && (collider.gameObject.layer == 6 || collider.gameObject.layer == 17)) {
             tiempoEliminacion = 5;
             //GENERAR CHARCO
             StartCoroutine(GenerarCharco(transform.localPosition));
+        }
+        else if ((collider.gameObject.layer == 3 || collider.gameObject.layer == 19 || collider.gameObject.layer == 16) && transform.gameObject.layer == 14)
+        {
+            //GENERAR BOLA DE VENENO DESCENDENTE
+            tiempoEliminacion = 50f;
+            this.GetComponent<CircleCollider2D>().isTrigger = true;
+            rb.velocity = new Vector2(0f, 0f);
         }
     }
 
@@ -97,13 +103,6 @@ public class BolaVeneno : MonoBehaviour
             StartCoroutine(GenerarCharco(transform.localPosition));
 
         }
-        else if (collision.gameObject.layer == 3 || collision.gameObject.layer == 19) {
-            //GENERAR BOLA DE VENENO DESCENDENTE
-            tiempoEliminacion = 50f;
-            this.GetComponent<CircleCollider2D>().isTrigger = true;
-            rb.velocity = new Vector2(0f, rb.velocity.y);
-        }
-
     }
 
 

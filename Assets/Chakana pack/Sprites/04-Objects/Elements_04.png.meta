@@ -223,12 +223,12 @@ TextureImporter:
       name: Elements_04_4
       rect:
         serializedVersion: 2
-        x: 3651
+        x: 3671
         y: 0
-        width: 1149
-        height: 76
+        width: 1129
+        height: 237
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []

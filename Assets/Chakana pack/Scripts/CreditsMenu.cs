@@ -16,10 +16,18 @@ public class CreditsMenu : MonoBehaviour
     public Button btExit;
 
     private bool corutinaIniciada = false;
+    string escena;
 
     void Start()
     {
         //btExit.Select();
+        escena = SceneManager.GetActiveScene().name;
+
+        if (escena == "00- Intro Start Game")
+        {
+            Invoke("OpenStartRoom", 51f);
+        }
+
     }
 
     // Update is called once per frame
@@ -56,6 +64,20 @@ public class CreditsMenu : MonoBehaviour
         //}
 
        
+    }
+
+    public void OpenStartRoom()
+    {
+
+        loadPanel.SetActive(true);
+
+        //if (!corutinaIniciada)
+        //{
+        StartCoroutine(LoadAsyncScene(2));
+        //corutinaIniciada = true;
+        //}
+
+
     }
 
     IEnumerator LoadAsyncScene(int sceneIndex)

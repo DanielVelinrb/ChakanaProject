@@ -13,13 +13,14 @@ GameObject:
   - component: {fileID: 7186887650751716160}
   - component: {fileID: 3316380350796550789}
   - component: {fileID: 1671242022381452182}
+  - component: {fileID: 9123002084359319138}
   m_Layer: 3
   m_Name: Apallimay Escudo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3354432359483531859
 Transform:
   m_ObjectHideFlags: 0
@@ -62,7 +63,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -169,8 +170,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   gold: 0
-  vida: 9000
-  defensa: 0
+  vida: 350
   ataque: 100
   ataqueMax: 100
   estadoViento: 0
@@ -185,17 +185,17 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
-  inmuneDash: 0
   vientoFX: {fileID: 8488511914963349049, guid: 863658301b00bb0438abc11b66b4e10c, type: 3}
   fuegoFX: {fileID: 7027134392714734881, guid: 0c2c2396bdabb334cb5f32942120a349, type: 3}
   venenoFX: {fileID: 5977171225950289729, guid: 86e8a8e38a4c3c54e8de87dc974dcf69, type: 3}
   recieveDmgFX: {fileID: 1313361013208637518, guid: 6826bee3237ef6d4bb1cc8e40cbbcbc9, type: 3}
   receiveDmgMat: {fileID: 2100000, guid: cf19960cdfd3e724384d2fd13b05ed1e, type: 2}
   explosion: {fileID: 0}
-  combFX01: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
+  combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
-  combFX03: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
-  fuerzaRecoil: 2
+  combFX03: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
+  damageTxt: {fileID: 7041699412294678087, guid: 7081c03da804dc8419bf611f7924a1a7, type: 3}
+  fuerzaRecoil: 3
   deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
   rangoVision: 10
   rangoAtaque: 1.5
@@ -203,13 +203,14 @@ MonoBehaviour:
   groundLayer:
     serializedVersion: 2
     m_Bits: 131136
-  objetivo: {x: 0, y: 0, z: 0}
-  speed: 4
-  groundDetector: {fileID: 8529676781732042558}
-  wallDetector: {fileID: 6293307691400626687}
   wallLayer:
     serializedVersion: 2
     m_Bits: 65536
+  objetivo: {x: 0, y: 0, z: 0}
+  speed: 4
+  anim: {fileID: 0}
+  groundDetector: {fileID: 8529676781732042558}
+  wallDetector: {fileID: 6293307691400626687}
   distanciaPlayer: 0
   ataqueDisponible: 0
   atacando: 0
@@ -223,6 +224,27 @@ MonoBehaviour:
   t1: 0.6
   t2: 1.5
   escudo: {fileID: 0}
+--- !u!95 &9123002084359319138
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 575727464603290693}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 47c2f34bca5886c4293fbc6b6e4babd2, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &3021502075065343536
 GameObject:
   m_ObjectHideFlags: 0
@@ -309,7 +331,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5798353216852167671}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6, y: 0, z: 0}
+  m_LocalPosition: {x: 0.6, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

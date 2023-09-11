@@ -221,13 +221,9 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: 'Huyustus, envoy of the Gods, in order to fulfill your mission
-
-          your
-          mission I will provide you with weapons, but first you must fulfill several
-
-          fulfill
-          several missions to be able to buy them.'
+        value: Hoyustus, envoy of the Gods, in order to accomplish your mission,
+          I will equip you with weapons. However, you must first complete several
+          missions to be able to acquire them.
         type: 0
         typeString: 
       - title: Sequence
@@ -256,7 +252,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 80
-        y: 134
+        y: 132
         width: 160
         height: 30
     - id: 3
@@ -282,13 +278,8 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: 'You will have to collect two giant luminous mushrooms, a root of
-          the sacred
-
-          root of the sacred Ayahuasca tree and bring me the
-          mask of a sacred god.
-
-          of a sacred god.'
+        value: You must gather two colossal luminous mushrooms, an extract from the
+          revered Ayahuasca tree, and retrieve the sacred mask of a deity.
         type: 0
         typeString: 
       - title: Sequence
@@ -317,7 +308,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 80
-        y: 218
+        y: 216
         width: 160
         height: 30
     - id: 4
@@ -365,7 +356,7 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 80
+        x: 79
         y: 302
         width: 160
         height: 30
@@ -496,16 +487,73 @@ MonoBehaviour:
         type: 0
         typeString: 
       - title: Dialogue Text
-        value: 'Huyustus, envoy of the Gods, you have completed the missions.
+        value: 'Hoyustus, envoy of the Gods, you have completed the mission.
 
-          missions.
-          I congratulate you brave warrior.
-
-          Choose your weapons for battle.'
+          I
+          congratulate you brave warrior.'
         type: 0
         typeString: 
       - title: Sequence
         value: SetContinueMode(true)
+        type: 0
+        typeString: 
+      conversationID: 2
+      isRoot: 0
+      isGroup: 0
+      nodeColor: 
+      delaySimStatus: 0
+      falseConditionAction: Block
+      conditionPriority: 2
+      outgoingLinks:
+      - originConversationID: 2
+        originDialogueID: 1
+        destinationConversationID: 2
+        destinationDialogueID: 2
+        isConnector: 0
+        priority: 2
+      conditionsString: 
+      userScript: 
+      onExecute:
+        m_PersistentCalls:
+          m_Calls: []
+      canvasRect:
+        serializedVersion: 2
+        x: 160
+        y: 80
+        width: 160
+        height: 30
+    - id: 2
+      fields:
+      - title: Title
+        value: 
+        type: 0
+        typeString: 
+      - title: Description
+        value: 
+        type: 0
+        typeString: 
+      - title: Actor
+        value: 2
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Conversant
+        value: 1
+        type: 5
+        typeString: CustomFieldType_Actor
+      - title: Menu Text
+        value: 
+        type: 0
+        typeString: 
+      - title: Dialogue Text
+        value: Choose your weapons for battle.
+        type: 0
+        typeString: 
+      - title: Sequence
+        value: 
+        type: 0
+        typeString: 
+      - title: EventGuid
+        value: a5e6daa6-f1c1-4c03-8023-79089a5e2b25
         type: 0
         typeString: 
       conversationID: 2
@@ -524,7 +572,7 @@ MonoBehaviour:
       canvasRect:
         serializedVersion: 2
         x: 160
-        y: 80
+        y: 130
         width: 160
         height: 30
     entryGroups: []
@@ -814,6 +862,10 @@ MonoBehaviour:
         value: SetContinueMode(true)
         type: 0
         typeString: 
+      - title: EventGuid
+        value: 60addcb5-2177-4927-a3d2-f0a0b3a4da8a
+        type: 0
+        typeString: 
       conversationID: 4
       isRoot: 0
       isGroup: 0
@@ -829,13 +881,13 @@ MonoBehaviour:
           m_Calls: []
       canvasRect:
         serializedVersion: 2
-        x: 160
-        y: 80
+        x: 161.09888
+        y: 78.90111
         width: 160
         height: 30
     entryGroups: []
-    canvasScrollPosition: {x: 0, y: 0}
-    canvasZoom: 1
+    canvasScrollPosition: {x: 60.071373, y: 9.538967}
+    canvasZoom: 0.9100001
   syncInfo:
     syncActors: 0
     syncItems: 0

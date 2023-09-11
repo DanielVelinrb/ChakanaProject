@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
+using TMPro;
 
 public class CharactersBehaviour : MonoBehaviour
 {
@@ -38,6 +40,7 @@ public class CharactersBehaviour : MonoBehaviour
     [SerializeField] protected GameObject combFX01;
     [SerializeField] protected GameObject combFX02;
     [SerializeField] protected GameObject combFX03;
+    [SerializeField] protected GameObject damageTxt;
 
     protected GameObject combObj01, combObj02, combObj03;
     protected Material playerMat = null;
@@ -48,12 +51,16 @@ public class CharactersBehaviour : MonoBehaviour
     private GameObject vientoObj, fuegoObj, venenoObj;
     protected float vidaMax = 0;
 
-
-
     //***************************************************************************************************
     //CORRUTINA DE DANIO E INVULNERABILIDAD (POSIBLE SEPARACION DE LA VULNERABILIDAD A METODO INDIVIDUAL)
     //***************************************************************************************************
     protected virtual IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil)
+    {
+        yield return null;
+    }
+
+
+    protected virtual IEnumerator cooldownRecibirDanio(int direccion, float fuerzaRecoil, float tiempoInvulnerabilidad)
     {
         Recoil(direccion, fuerzaRecoil);
         if (vida <= 0)
@@ -61,10 +68,10 @@ public class CharactersBehaviour : MonoBehaviour
             yield break;
         }
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         //SE DETIENE EL RECOIL
         rb.velocity = Vector2.zero;
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.4f);
         //EL OBJECT PUEDE VOLVER A MOVERSE SIN ESTAR EN ESTE ESTADO DE "SER ATACADO"
         playable = true;
         //REVISAR SI SE DEBE PASAR EL VALOR DE 2 A LOS ENEMIGOS ANTES DE QUITAR LAS INVULNERABILIDADES O SI ESTA BIEN CON 0.5
@@ -180,7 +187,7 @@ public class CharactersBehaviour : MonoBehaviour
         for (int i = 0; i < 6; i++)
         {
             yield return new WaitForSeconds(2f);
-            vida -= (afectacionFuego * aumentoFuegoPotenciado);
+            RecibirDanio(afectacionFuego * aumentoFuegoPotenciado);
         }
         aumentoFuegoPotenciado = 1;
         estadoFuego = false;
@@ -197,15 +204,13 @@ public class CharactersBehaviour : MonoBehaviour
     {
         if (venenoObj == null)
         {
-            venenoObj = Instantiate(venenoFX, transform.position, venenoFX.transform.rotation);
+            venenoObj = Instantiate(venenoFX, transform.position, Quaternion.identity);
             venenoObj.transform.parent = transform;
         }
         for (int i = 0; i < 5; i++)
         {
             yield return new WaitForSeconds(2f);
-            float dmg = vidaMax * afectacionVeneno;
-            vida -= dmg;
-            print(vidaMax);
+            RecibirDanio(vidaMax * afectacionVeneno);
         }
         estadoVeneno = false;
         counterEstados = 0;
@@ -225,6 +230,10 @@ public class CharactersBehaviour : MonoBehaviour
 
         StartCoroutine(RecibirDanioBrillo());
         Destroy(Instantiate(recieveDmgFX, transform.position, Quaternion.identity), 1);
+
+        Transform dmgTxt = Instantiate(damageTxt, transform.position, Quaternion.identity).transform;
+        dmgTxt.GetChild(0).GetComponent<TextMeshPro>().text = danio.ToString();
+        Destroy(dmgTxt.gameObject, 0.5f);
 
         //DE SER TRUE SIGNIFICARIA QUE EL JUGADOR ESTA PARALIZADO VOLVIENDO A SUS VALORES REGULARES (ELIMINACION PARALISIS)
         if (paralizadoPorAtaque)
@@ -377,9 +386,9 @@ public class CharactersBehaviour : MonoBehaviour
             else if (counterEstados > 0)
             {
                 counterEstados += 1;
-                if (venenoObj != null) Destroy(venenoObj);
-                if (fuegoObj != null) Destroy(fuegoObj);
-                if (vientoObj != null) Destroy(vientoObj);
+                //if (venenoObj != null) Destroy(venenoObj);
+                //if (fuegoObj != null) Destroy(fuegoObj);
+                //if (vientoObj != null) Destroy(vientoObj);
                 StartCoroutine("combinacionesElementales");
                 return;
 
@@ -443,7 +452,7 @@ public class CharactersBehaviour : MonoBehaviour
 
     }
 
-    protected virtual IEnumerator combinacionesElementales()
+    protected IEnumerator combinacionesElementales()
     {
         if (counterEstados == 11)
         {
@@ -457,6 +466,7 @@ public class CharactersBehaviour : MonoBehaviour
             StopCoroutine("afectacionEstadoFuego");
             estadoFuego = true;
             StartCoroutine("afectacionEstadoFuego");
+            GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibration();
         }
         else if (counterEstados == 101)
         {
@@ -483,10 +493,13 @@ public class CharactersBehaviour : MonoBehaviour
             StopCoroutine("afectacionEstadoVeneno");
             StopCoroutine("afectacionEstadoFuego");
             counterEstados = 0;
-            explosion.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", "ExplosionPlayer");
-            Instantiate(explosion, transform.position, Quaternion.identity);
+            GameObject explosionGenerada = Instantiate(explosion, transform.position, Quaternion.identity);
+            string tipoExplosion = (layerObject != 11) ? "ExplosionPlayer" : "ExplosionEnemy";
+            explosionGenerada.GetComponent<ExplosionBehaviour>().modificarValores(3, 45, 6, 12, "Untagged", tipoExplosion);
             estadoVeneno = false;
             estadoFuego = false;
+
+            GameObject.Find("HUDMenu").GetComponent<HudManager>().SetVibration();
         }
         yield return new WaitForEndOfFrame();
     }

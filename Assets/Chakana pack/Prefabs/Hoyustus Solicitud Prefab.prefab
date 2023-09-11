@@ -63,6 +63,83 @@ Transform:
   m_Father: {fileID: 3475676534869305462}
   m_RootOrder: 18
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1967936731190053651
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5794618149495577662}
+  - component: {fileID: 2348695912333029137}
+  m_Layer: 14
+  m_Name: AlabardaHabilidadFuego
+  m_TagString: Fuego
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &5794618149495577662
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967936731190053651}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3246166418984944529}
+  m_RootOrder: -1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &2348695912333029137
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1967936731190053651}
+  m_Enabled: 1
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_UsedByComposite: 0
+  m_Offset: {x: 1.5, y: 0.8}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  serializedVersion: 2
+  m_Size: {x: 3, y: 0.6}
+  m_EdgeRadius: 0
 --- !u!1 &2374536855388483605
 GameObject:
   m_ObjectHideFlags: 0
@@ -258,15 +335,22 @@ MonoBehaviour:
   combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
   combFX03: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
+  damageTxt: {fileID: 7041699412294678087, guid: 7081c03da804dc8419bf611f7924a1a7, type: 3}
   fuerzaRecoil: 0
   walkSpeedGround: 12
-  resistenciaAire: 0.3
+  resistenciaAire: 0.1
   walkSpeed: 12
   isWalking: 0
+  fuerzaPrimerSalto: 10
+  fuerzaDobleSalto: 18
   isJumping: 0
+  isSecondJump: 0
   correctorSalto: 50
   firstJump: 1
   secondJump: 0
+  saltoEspecial: 0
+  extraSalto: 10
+  fuerzaCaida: 8
   groundCheckRadius: 0.15
   groundTransform: {fileID: 1103388191273375783}
   groundLayer:
@@ -305,10 +389,8 @@ MonoBehaviour:
   currentTimeAir: 0
   tocandoPared: 1
   timeDashCooldown: 0.5
+  velocidadDash: 45
   dashAvailable: 1
-  bodyHoyustus: {fileID: 0}
-  dashBody: {fileID: 0}
-  body: {fileID: 0}
   isDashing: 0
   atacando: 0
   codigoAtaque: 0
@@ -328,7 +410,6 @@ MonoBehaviour:
   danioExplosionCombinacionFuego_Veneno: 35
   bolaVeneno: {fileID: 0}
   wallPoint: {fileID: 9010123227811289174}
-  roofPoint: {fileID: 0}
   botonCuracion: 0
   aplastarBotonCuracion: 0
   realizandoHabilidadLanza: 0
@@ -340,6 +421,7 @@ MonoBehaviour:
   skillObj02: {fileID: 7141145681980626574, guid: 693d6d2141492854ba87f459a4d373a9, type: 3}
   skillObj03: {fileID: 0}
   skillObj04: {fileID: 794117543607883160, guid: 6b131bd84a93ee34db09dcf48b92966a, type: 3}
+  deathFX: {fileID: 9189741419170301191, guid: 451f785dd13e3e24599c1d92f4d8b2b0, type: 3}
 --- !u!212 &1998959459
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -744,10 +826,11 @@ EdgeCollider2D:
   - {x: 3.3519325, y: 2.316327}
   - {x: 2.617735, y: 3.500869}
   - {x: 1.0356064, y: 4.4082904}
-  - {x: 0.93512344, y: 3.3075235}
-  - {x: 2.0569038, y: 2.266979}
-  - {x: 2.0233555, y: 1.5917292}
-  - {x: 1.353054, y: 0.7595067}
+  - {x: 0.75255966, y: 3.3550537}
+  - {x: 1.8306198, y: 2.0829957}
+  - {x: 1.7014122, y: 1.8382001}
+  - {x: 1.4175434, y: 1.1882334}
+  - {x: 0.6859436, y: 0.4371245}
   - {x: -0.69862556, y: -0.38599753}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
@@ -5762,7 +5845,7 @@ GameObject:
   - component: {fileID: 7118044251041346149}
   m_Layer: 14
   m_Name: Lanza
-  m_TagString: Untagged
+  m_TagString: Fuego
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5782,6 +5865,7 @@ Transform:
   - {fileID: 8219284701690621551}
   - {fileID: 3867065420259851989}
   - {fileID: 5698958873637541474}
+  - {fileID: 5794618149495577662}
   m_Father: {fileID: 3475676534869305462}
   m_RootOrder: 20
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -5212,7 +5212,7 @@ Transform:
   - {fileID: 1008283376704437955}
   - {fileID: 1546181713}
   m_Father: {fileID: 0}
-  m_RootOrder: -1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &6151585412992654578
 Rigidbody2D:
@@ -5311,7 +5311,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gold: 0
   vida: 550
-  defensa: 0
   ataque: 75
   ataqueMax: 75
   estadoViento: 0
@@ -5326,18 +5325,18 @@ MonoBehaviour:
   invulnerable: 0
   playable: 1
   explosionInvulnerable: 
-  inmuneDash: 0
   vientoFX: {fileID: 8488511914963349049, guid: 863658301b00bb0438abc11b66b4e10c, type: 3}
   fuegoFX: {fileID: 7027134392714734881, guid: 0c2c2396bdabb334cb5f32942120a349, type: 3}
   venenoFX: {fileID: 5977171225950289729, guid: 86e8a8e38a4c3c54e8de87dc974dcf69, type: 3}
   recieveDmgFX: {fileID: 1313361013208637518, guid: 6826bee3237ef6d4bb1cc8e40cbbcbc9, type: 3}
   receiveDmgMat: {fileID: 2100000, guid: cf19960cdfd3e724384d2fd13b05ed1e, type: 2}
   explosion: {fileID: 0}
-  combFX01: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
+  combFX01: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
   combFX02: {fileID: 5785389084871935989, guid: aa7beddd445da0a4d8b6892329942385, type: 3}
-  combFX03: {fileID: 7104841757180345208, guid: fbfdd1beacfb60147855937fca89a3b8, type: 3}
+  combFX03: {fileID: 2865319150146086237, guid: 931477c9533d20947b8b6c002a4888ef, type: 3}
+  damageTxt: {fileID: 7041699412294678087, guid: 7081c03da804dc8419bf611f7924a1a7, type: 3}
   fuerzaRecoil: 0
-  deathFX: {fileID: 0}
+  deathFX: {fileID: 5291752693616908444, guid: 414d899ee0219d441b1c1cfc0a9d43f1, type: 3}
   rangoVision: 12
   rangoAtaque: 3
   rangoPreparacion: 2
@@ -5349,11 +5348,14 @@ MonoBehaviour:
     m_Bits: 0
   objetivo: {x: 0, y: 0, z: 0}
   speed: 10
+  anim: {fileID: 0}
   tiempoVolteo: 0
   maxTiempoVolteo: 3
   t1: 0.3
   t2: 2
-  enfriamientoAtaque: 0
+  enfriamientoAtaque: 0.3
+  tiempoAtaque: 0.3
+  fuerzaDesplazamientoAtaque: 6
   enfriamientoCombo: 0
   direction: 0
   siguiendo: 0
@@ -5373,7 +5375,6 @@ MonoBehaviour:
   teletransportandose: 0
   componentesBoraro: []
   objetivoX: {fileID: 0}
-  anim: {fileID: 0}
   audioHurt: {fileID: 8300000, guid: 15917ccea2ca1c8408fea67abbf31b6b, type: 3}
 --- !u!212 &9031305201279683209
 SpriteRenderer:
@@ -5395,7 +5396,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5416,7 +5417,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 8
-  m_Sprite: {fileID: 4798583056260784852, guid: a846635290f3ce843a96b28fb426f79d, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6e259b70419142a40bd4ff7b6e64ce12, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -5548,7 +5549,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3360899412353715273}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.2800025, y: 2.5800004, z: 0}
+  m_LocalPosition: {x: 0, y: 2.5800004, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

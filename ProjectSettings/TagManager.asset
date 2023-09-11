@@ -15,6 +15,7 @@ TagManager:
   - ExplosionPlayer
   - FxTemporaire
   - Gold
+  - Music
   layers:
   - Default
   - TransparentFX

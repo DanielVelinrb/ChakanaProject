@@ -53,7 +53,7 @@ public class UkukuMision : MonoBehaviour
             {
                 GetComponent<SpriteRenderer>().enabled = false;
                 GetComponent<BoxCollider2D>().enabled = false;
-                transform.GetChild(1).gameObject.SetActive(false);
+                transform.GetChild(0).gameObject.SetActive(false);
             }
         }
     }

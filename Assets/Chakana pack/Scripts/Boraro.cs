@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
@@ -9,7 +10,9 @@ public class Boraro : Enemy
     [SerializeField] private float maxTiempoVolteo;
     [SerializeField] private float t1;
     [SerializeField] private float t2;
-    [SerializeField] private float enfriamientoAtaque;
+    [SerializeField] private float enfriamientoAtaque; 
+    [SerializeField] private float tiempoAtaque;
+    [SerializeField] private float fuerzaDesplazamientoAtaque;
     [SerializeField] private float enfriamientoCombo;
     [SerializeField] private float direction;
     [SerializeField] private bool siguiendo;
@@ -91,27 +94,35 @@ public class Boraro : Enemy
 
     void Update()
     {
+        anim.SetBool("Atacando", atacando);
+        anim.SetBool("Siguiendo", siguiendo);
+        anim.SetBool("Playable", playable);
+        anim.SetBool("Dentro Rango", entroRangoAtaque);
         comportamiento();
         tiempoVolteo += Time.deltaTime;
         Muerte();
 
         if (!atacando)
         {
-            if(!siguiendo && maxTiempoVolteo < tiempoVolteo && !ataqueDisponible)
+            if(!siguiendo && maxTiempoVolteo < tiempoVolteo && (!entroRangoAtaque || ataqueDisponible))
                 Flip();
             if (detectarPiso())
             {
-                if (siguiendo && !teletransportandose && playable)
+                if (siguiendo && !teletransportandose && playable && !entroRangoAtaque)
                     Move();
             }
             else
             {
                 rb.velocity = new Vector2(0, rb.velocity.y);
+                if (hoyustus.transform.position.x < transform.position.x)
+                    transform.localScale = new Vector3(-1, 1, 1);
+                else if (hoyustus.transform.position.x > transform.position.x)
+                        transform.localScale = Vector3.one;
             }
         }
     }
 
-
+    
     void Flip() {
         if (transform.position.x <= objetivo.x)
             direction = -direction;
@@ -155,20 +166,13 @@ public class Boraro : Enemy
 
         if (collider.gameObject.layer == 14)
         {
-            int direccion = 1;
-            if (collider.transform.position.x > gameObject.transform.position.x)
-            {
-                direccion = -1;
-            }
-            else
-            {
-                direccion = 1;
-            }
+
+            int direccion = -(int)OrientacionDeteccionPlayer(collider.transform.position.x);
 
             TriggerElementos_1_1_1(collider);
-            StartCoroutine(cooldownRecibirDanio(direccion, 1));
             if (collider.transform.parent != null)
             {
+                StartCoroutine(cooldownRecibirDanio(direccion, 1));
                 collider.transform.parent.parent.GetComponent<Hoyustus>().cargaLanza();
                 RecibirDanio(collider.transform.parent.parent.GetComponent<Hoyustus>().getAtaque());
                 charAudio.loop = false;
@@ -178,22 +182,17 @@ public class Boraro : Enemy
             }
             return;
         }
-        else if (collider.gameObject.layer == 11)
+        else if (collider.gameObject.layer == 11 && collider.gameObject.CompareTag("Untagged"))
         {
             rb.velocity = Vector2.zero;
-            //objetivo = hoyustus.transform.position;
             if (objetivo.x < transform.position.x)
-            {
                 transform.localScale = new Vector3(-1, 1, 1);
-            }
             else
-            {
                 transform.localScale = new Vector3(1, 1, 1);
-            }
             return;
         }
 
-        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18)
+        if (!collider.name.Contains("Enemy") && collider.gameObject.layer != 3 && collider.gameObject.layer != 18 && collider.gameObject.layer != 19)
         {
             TriggerElementos_1_1_1(collider);
         }
@@ -321,18 +320,33 @@ public class Boraro : Enemy
         rb.velocity = new Vector2(0f, rb.velocity.y);
         detectorPiso.transform.position = transform.position + Vector3.down * 2 + Vector3.right * transform.localScale.x * 3f;
         for (int i = 0; i < 4; i++) {
-            if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer)) {
+            if (!Physics2D.OverlapCircle(detectorPiso.transform.position, 1f, groundLayer))
+            {
+                anim.Play("BoraroIdle");
+                anim.speed = 1;
                 rb.velocity = Vector3.zero;
-                break;
+                atacando = false;
+                tiempoVolteo = 0;
+                yield return new WaitForSeconds(t2);
+                ataqueDisponible = true;
+                yield break;
             }
-            rb.AddForce(new Vector2(6f * direction, 0), ForceMode2D.Impulse);
+            if (i % 2 == 0)
+            {
+                anim.Play("Attack", -1, 0);
+            }
+            anim.speed = 1;
+            rb.AddForce(new Vector2(fuerzaDesplazamientoAtaque * direction, 0), ForceMode2D.Impulse);
             garras.SetActive(true);
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(tiempoAtaque);
+            anim.speed = 0;
             rb.velocity = new Vector2(0f, rb.velocity.y);
             garras.SetActive(false);
-            yield return new WaitForSeconds(0.3f);
+            yield return new WaitForSeconds(enfriamientoAtaque);
         }
+        anim.Play("BoraroIdle");
         atacando = false;
+        anim.speed = 1;
         tiempoVolteo = 0;
         //TIEMPO POSTERIOR AL ATAQUE
         yield return new WaitForSeconds(t2);
